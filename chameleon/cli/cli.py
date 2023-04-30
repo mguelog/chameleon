@@ -18,4 +18,10 @@ init_parser.add_argument(
     action='store_true'
 )
 
+simulate_parser = subparsers.add_parser(
+    'simulate',
+    description='Run scripted simulation',
+    help='run scripted simulation'
+)
+
 args = parser.parse_args()
