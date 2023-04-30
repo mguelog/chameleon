@@ -1,0 +1,3 @@
+minicps~=1.1.4
+setuptools~=65.7.0
+mininet~=2.3.0
