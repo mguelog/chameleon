@@ -2,11 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name='chameleon',
-    version='0.0.0',
+    version='0.1.0',
     packages=find_packages(),
-    url='',
-    license='',
-    author='mguelog',
-    author_email='',
-    description=''
+    url='https://github.com/mguelog/chameleon',
+    author='Miguel Oña Guerrero',
+    entry_points={
+        "console_scripts": [
+            "chameleon = chameleon.main:main",
+        ]
+    }
 )
