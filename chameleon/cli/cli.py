@@ -23,5 +23,10 @@ simulate_parser = subparsers.add_parser(
     description='Run scripted simulation',
     help='run scripted simulation'
 )
+simulate_parser.add_argument(
+    '-l', '--log',
+    help='create new state log',
+    action='store_true'
+)
 
 args = parser.parse_args()
