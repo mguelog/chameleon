@@ -1,4 +1,5 @@
 from chameleon.cli.cli import args
+from chameleon import STATE_LOG
 import glob
 import subprocess
 
@@ -13,7 +14,7 @@ def main():
             print('Not init.py found')
     elif args.command == 'simulate':
         if args.log:
-            subprocess.run(['rm', 'simulation.log'])
+            subprocess.run(['rm', STATE_LOG])
         try:
             subprocess.run(['python3.10', 'run.py'])
         except FileNotFoundError:
