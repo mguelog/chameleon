@@ -53,7 +53,8 @@ ENERGY_STORAGE_ADDR = '10.0.0.3'
 ENERGY_STORAGE_TAGS = (
     ('ENERGY_STORAGE_POWER', 1, 'REAL'),
     ('ENERGY_STORAGE_VOLTAGE', 1, 'REAL'),
-    ('ENERGY_STORAGE_CURRENT', 1, 'REAL'))
+    ('ENERGY_STORAGE_CURRENT', 1, 'REAL'),
+    ('ENERGY_STORAGE_ENERGY', 1, 'REAL'))
 ENERGY_STORAGE_SERVER = {
     'address': ENERGY_STORAGE_ADDR,
     'tags': ENERGY_STORAGE_TAGS
@@ -131,8 +132,9 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_VOLTAGE', 45000);
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_CURRENT', 0);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_POWER', 0);
-    INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_VOLTAGE', 20000);
+    INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_VOLTAGE', 6500);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_CURRENT', 0);
+    INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_ENERGY', 250);
     INSERT INTO microgrid_table VALUES (1, 'LOAD_DEMAND_POWER', 500);
 """
 
@@ -143,9 +145,11 @@ SET_GRID_VOLTAGE = 'set_grid_voltage'
 
 SET_LOAD = 'set_load'
 PEAK_SHAVING = 'peak_shaving'
+CONSUME_BATTERY = 'consume_battery'
 
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
 
 # variables
 UTILITY_GRID_MAX_POWER = 500
+TICK_TIME = 30 / 3600

@@ -7,6 +7,7 @@ buffer = Buffer()
 ENERGY_STORAGE_POWER = ('ENERGY_STORAGE_POWER', 1)
 ENERGY_STORAGE_VOLTAGE = ('ENERGY_STORAGE_VOLTAGE', 1)
 ENERGY_STORAGE_CURRENT = ('ENERGY_STORAGE_CURRENT', 1)
+ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
 
@@ -14,6 +15,13 @@ peak_shaved = 1
 islanded = 0
 
 MAX_POWER = 1000
+
+NOMINAL_VOLTAGE = 5000
+MIN_VOLTAGE = NOMINAL_VOLTAGE - NOMINAL_VOLTAGE * 0.3
+MAX_VOLTAGE = NOMINAL_VOLTAGE + NOMINAL_VOLTAGE * 0.3
+VOLTAGE_RANGE = MAX_VOLTAGE - MIN_VOLTAGE
+
+MAX_ENERGY = 250
 
 
 def toggle_island(self):
@@ -95,6 +103,25 @@ def peak_shaving(self):
     buffer.free()
 
 
+def consume_battery(self):
+    power = self.get(ENERGY_STORAGE_POWER)
+    energy = self.get(ENERGY_STORAGE_ENERGY)
+
+    energy = round(energy - power * TICK_TIME, 2)
+    if energy < 0:
+        energy = 0
+
+    voltage = round((energy / MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+
+    self.set(ENERGY_STORAGE_ENERGY, energy)
+    print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
+
+    self.set(ENERGY_STORAGE_VOLTAGE, voltage)
+    print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+
+    buffer.free()
+
+
 if __name__ == '__main__':
     utility_grid = Device(name=ENERGY_STORAGE,
                           state=STATE,
@@ -103,5 +130,6 @@ if __name__ == '__main__':
                               TOGGLE_ISLAND: toggle_island,
                               TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                               SET_LOAD: set_load,
-                              PEAK_SHAVING: peak_shaving
+                              PEAK_SHAVING: peak_shaving,
+                              CONSUME_BATTERY: consume_battery
                           })
