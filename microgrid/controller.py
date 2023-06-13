@@ -10,6 +10,7 @@ UTILITY_GRID_POWER = ('UTILITY_GRID_POWER', 1)
 ENERGY_STORAGE_POWER = ('ENERGY_STORAGE_POWER', 1)
 
 tick = 1
+peak_shaved = 1
 islanded = 0
 
 
@@ -38,6 +39,19 @@ def toggle_island(self):
     buffer.wait()
 
 
+def toggle_peak_shaving(self):
+    global peak_shaved
+    if peak_shaved == 1:
+        peak_shaved = 0
+    else:
+        peak_shaved = 1
+
+    self.send(ENERGY_STORAGE_POWER, peak_shaved, ENERGY_STORAGE_ADDR)
+    print('DEBUG: {} set ENERGY_STORAGE peak_shaved: {}'.format(MICROGRID_CONTROLLER, peak_shaved))
+
+    buffer.wait()
+
+
 if __name__ == '__main__':
     microgrid_controller = Device(name=MICROGRID_CONTROLLER,
                                   state=STATE,
@@ -45,4 +59,5 @@ if __name__ == '__main__':
                                   transitions={
                                       CLOCK_TICK: clock_tick,
                                       TOGGLE_ISLAND: toggle_island,
+                                      TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                                   })
