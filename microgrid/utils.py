@@ -141,5 +141,10 @@ CLOCK_TICK = 'clock_tick'
 
 SET_GRID_VOLTAGE = 'set_grid_voltage'
 
+SET_LOAD = 'set_load'
+
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
+
+# variables
+UTILITY_GRID_MAX_POWER = 500
