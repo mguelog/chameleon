@@ -140,3 +140,5 @@ INIT_SCHEMA = """
 CLOCK_TICK = 'clock_tick'
 
 SET_GRID_VOLTAGE = 'set_grid_voltage'
+
+TOGGLE_ISLAND = 'toggle_island'
