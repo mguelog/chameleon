@@ -138,3 +138,5 @@ INIT_SCHEMA = """
 
 # events
 CLOCK_TICK = 'clock_tick'
+
+SET_GRID_VOLTAGE = 'set_grid_voltage'
