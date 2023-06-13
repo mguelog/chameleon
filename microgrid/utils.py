@@ -135,3 +135,6 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_CURRENT', 0);
     INSERT INTO microgrid_table VALUES (1, 'LOAD_DEMAND_POWER', 500);
 """
+
+# events
+CLOCK_TICK = 'clock_tick'
