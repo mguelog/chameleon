@@ -142,6 +142,7 @@ CLOCK_TICK = 'clock_tick'
 SET_GRID_VOLTAGE = 'set_grid_voltage'
 
 SET_LOAD = 'set_load'
+PEAK_SHAVING = 'peak_shaving'
 
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'

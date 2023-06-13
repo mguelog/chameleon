@@ -52,6 +52,22 @@ def toggle_peak_shaving(self):
     buffer.wait()
 
 
+def peak_shaving(self):
+    global peak_shaved
+    print('DEBUG: {} peak_shaved status: {}'.format(MICROGRID_CONTROLLER, peak_shaved))
+
+    if peak_shaved == 1:
+        utility_grid_power = self.get(UTILITY_GRID_POWER)
+        demand = 0
+        if utility_grid_power >= UTILITY_GRID_MAX_POWER:
+            demand = 1
+
+        self.send(ENERGY_STORAGE_POWER, demand, ENERGY_STORAGE_ADDR)
+        print('DEBUG: {} demanded ENERGY_STORAGE power: {}'.format(MICROGRID_CONTROLLER, demand))
+
+    buffer.wait()
+
+
 if __name__ == '__main__':
     microgrid_controller = Device(name=MICROGRID_CONTROLLER,
                                   state=STATE,
@@ -60,4 +76,5 @@ if __name__ == '__main__':
                                       CLOCK_TICK: clock_tick,
                                       TOGGLE_ISLAND: toggle_island,
                                       TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
+                                      PEAK_SHAVING: peak_shaving
                                   })

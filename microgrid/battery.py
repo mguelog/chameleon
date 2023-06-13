@@ -69,6 +69,32 @@ def set_load(self):
         buffer.wait()
 
 
+def peak_shaving(self):
+    global peak_shaved
+    print('DEBUG: {} peak_shaved status: {}'.format(ENERGY_STORAGE, peak_shaved))
+
+    buffer.delay()
+
+    if peak_shaved == 1:
+        demand = float(self.receive(ENERGY_STORAGE_POWER, ENERGY_STORAGE_ADDR))
+        print('DEBUG: {} was demanded by MICROGRID_CONTROLLER power: {}'.format(ENERGY_STORAGE, demand))
+
+        if demand == 1:
+            power = self.get(LOAD_DEMAND_POWER)
+            power = round(power - UTILITY_GRID_MAX_POWER, 2)
+
+            voltage = self.get(ENERGY_STORAGE_VOLTAGE)
+            current = round((power * 1000) / voltage, 2)
+
+            self.set(ENERGY_STORAGE_CURRENT, current)
+            print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(ENERGY_STORAGE, current))
+
+            self.set(ENERGY_STORAGE_POWER, power)
+            print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(ENERGY_STORAGE, power))
+
+    buffer.free()
+
+
 if __name__ == '__main__':
     utility_grid = Device(name=ENERGY_STORAGE,
                           state=STATE,
@@ -77,4 +103,5 @@ if __name__ == '__main__':
                               TOGGLE_ISLAND: toggle_island,
                               TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                               SET_LOAD: set_load,
+                              PEAK_SHAVING: peak_shaving
                           })
