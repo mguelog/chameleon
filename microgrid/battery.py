@@ -60,10 +60,10 @@ def set_load(self):
         current = round((power * 1000) / voltage, 2)
 
         self.set(ENERGY_STORAGE_CURRENT, current)
-        print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(ENERGY_STORAGE, current))
+        print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
 
         self.set(ENERGY_STORAGE_POWER, power)
-        print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(ENERGY_STORAGE, power))
+        print('DEBUG: {} set ENERGY_STORAGE_POWER: {}'.format(ENERGY_STORAGE, power))
 
         buffer.free()
 
@@ -95,10 +95,10 @@ def peak_shaving(self):
             current = round((power * 1000) / voltage, 2)
 
             self.set(ENERGY_STORAGE_CURRENT, current)
-            print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(ENERGY_STORAGE, current))
+            print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
 
             self.set(ENERGY_STORAGE_POWER, power)
-            print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(ENERGY_STORAGE, power))
+            print('DEBUG: {} set ENERGY_STORAGE_POWER: {}'.format(ENERGY_STORAGE, power))
 
     buffer.free()
 
@@ -123,13 +123,13 @@ def consume_battery(self):
 
 
 if __name__ == '__main__':
-    utility_grid = Device(name=ENERGY_STORAGE,
-                          state=STATE,
-                          protocol=ENERGY_STORAGE_PROTOCOL,
-                          transitions={
-                              TOGGLE_ISLAND: toggle_island,
-                              TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
-                              SET_LOAD: set_load,
-                              PEAK_SHAVING: peak_shaving,
-                              CONSUME_BATTERY: consume_battery
-                          })
+    battery_storage = Device(name=ENERGY_STORAGE,
+                             state=STATE,
+                             protocol=ENERGY_STORAGE_PROTOCOL,
+                             transitions={
+                                 TOGGLE_ISLAND: toggle_island,
+                                 TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
+                                 SET_LOAD: set_load,
+                                 PEAK_SHAVING: peak_shaving,
+                                 CONSUME_BATTERY: consume_battery
+                             })
