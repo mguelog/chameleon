@@ -6,8 +6,8 @@ buffer = Buffer()
 
 class Device(PLC):
 
-    def __init__(self, name, protocol, state, transitions):
-        self.transitions = transitions
+    def __init__(self, name, protocol, state, actions):
+        self.actions = actions
         PLC.__init__(self, name, protocol, state)
 
     def pre_loop(self, sleep=0):
@@ -18,10 +18,10 @@ class Device(PLC):
 
         action = buffer.read()
 
-        while action != buffer.EXIT:
+        while not buffer.is_exited():
 
-            if action not in [buffer.FREE, buffer.WAIT] and action in self.transitions:
-                self.transitions[action](self)
+            if action not in [buffer.FREE, buffer.WAIT] and action in self.actions:
+                self.actions[action](self)
 
             action = buffer.read()
 

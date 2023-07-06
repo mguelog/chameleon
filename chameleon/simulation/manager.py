@@ -24,6 +24,9 @@ class Manager:
 
         for i in range(self.cycles):
 
+            if buffer.is_exited():
+                break
+
             while not self.queue.empty():
                 while not buffer.is_free():
                     pass

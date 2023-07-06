@@ -39,7 +39,10 @@ class Buffer:
             return file.readline()
 
     def is_free(self):
-        return self.read() == self.FREE
+        return self.read() in (self.FREE, self.EXIT)
+
+    def is_exited(self):
+        return self.read() == self.EXIT
 
     def delay(self):
         time.sleep(self.SLEEP)
