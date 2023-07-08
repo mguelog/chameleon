@@ -16,9 +16,9 @@ def main():
         if args.log:
             subprocess.run(['rm', STATE_LOG, CYCLE_LOG])
         try:
-            subprocess.run(['python3.10', 'run.py'])
+            subprocess.run(['python3.10', 'simulate.py'])
         except FileNotFoundError:
-            print('Not run.py found')
+            print('Not simulate.py found')
 
 
 if __name__ == '__main__':
