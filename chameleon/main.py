@@ -14,7 +14,7 @@ def main():
         except FileNotFoundError:
             print('Not init.py found')
     elif args.command == 'simulate':
-        if args.log:
+        if args.new:
             subprocess.run(['sudo', 'rm', STATE_LOG, CYCLE_LOG])
 
         try:
