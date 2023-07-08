@@ -8,8 +8,8 @@ simulation = Simulation(
     devices=[CONTROLLER_NAME, TANK_NAME],
     topo=topo,
     manager=manager,
-    cli=False
-)
+    cli=False,
+    wireshark=False)
 
 if __name__ == '__main__':
     simulation.start()

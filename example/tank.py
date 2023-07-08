@@ -36,7 +36,7 @@ if __name__ == '__main__':
     tank = Device(name=TANK_NAME,
                   state=STATE,
                   protocol=TANK_PROTOCOL,
-                  transitions={
+                  actions={
                       OPEN_VALVE: open_valve,
                       CHECK_TEMPERATURE: check_temperature
                   })

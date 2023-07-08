@@ -21,6 +21,6 @@ if __name__ == '__main__':
     controller = Device(name=CONTROLLER_NAME,
                         state=STATE,
                         protocol=CONTROLLER_PROTOCOL,
-                        transitions={
+                        actions={
                             OPEN_VALVE: open_valve
                         })

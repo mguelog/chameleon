@@ -1,17 +1,18 @@
 from chameleon.simulation.manager import Manager
 from chameleon.simulation.buffer import Buffer
-from utils import OPEN_VALVE, CHECK_TEMPERATURE
+from utils import OPEN_VALVE, CHECK_TEMPERATURE, NAME
 
 buffer = Buffer()
 
 manager = Manager(
-    transitions={OPEN_VALVE, CHECK_TEMPERATURE},
-    simulation=[
+    cycle_actions=[
         OPEN_VALVE,
         CHECK_TEMPERATURE,
         OPEN_VALVE,
         OPEN_VALVE,
         CHECK_TEMPERATURE,
-        buffer.EXIT
-    ]
+        buffer.EXIT],
+    external_actions={OPEN_VALVE, CHECK_TEMPERATURE},
+    cycles=1,
+    table=NAME
 )
