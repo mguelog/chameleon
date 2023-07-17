@@ -9,8 +9,8 @@ subparsers = parser.add_subparsers(dest='command')
 
 init_parser = subparsers.add_parser(
     'init',
-    description='Initialize simulation state',
-    help='initialize simulation state'
+    description='Initialize simulation state by executing init.py',
+    help='initialize simulation state by executing init.py'
 )
 init_parser.add_argument(
     '-o', '--overwrite',
