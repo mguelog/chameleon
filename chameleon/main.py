@@ -17,13 +17,14 @@ def main():
             print('Not init.py found')
 
     elif args.command == 'simulate':
-        if args.new:
-            subprocess.run(['sudo', 'rm', STATE_LOG, CYCLE_LOG])
+        if args.log:
+            try:
+                os.remove(STATE_LOG)
+                os.remove(CYCLE_LOG)
+            except FileNotFoundError:
+                print('Not previous log files found')
 
-        try:
-            subprocess.run(['sudo', 'python3.10', 'simulate.py'])
-        except FileNotFoundError:
-            print('Not simulate.py found')
+        subprocess.run(['sudo', 'python3.10', 'simulate.py'])
 
 
 if __name__ == '__main__':

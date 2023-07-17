@@ -20,11 +20,11 @@ init_parser.add_argument(
 
 simulate_parser = subparsers.add_parser(
     'simulate',
-    description='Run system simulation',
-    help='run system simulation'
+    description='Run system simulation by executing simulate.py',
+    help='run system simulation by executing simulate.py'
 )
 simulate_parser.add_argument(
-    '-n', '--new',
+    '-l', '--log',
     help='create new log files',
     action='store_true'
 )
