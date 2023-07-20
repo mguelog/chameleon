@@ -72,7 +72,7 @@ if __name__ == '__main__':
     utility_grid = Device(name=UTILITY_GRID,
                           state=STATE,
                           protocol=UTILITY_GRID_PROTOCOL,
-                          transitions={
+                          actions={
                               TOGGLE_ISLAND: toggle_island,
                               SET_GRID_VOLTAGE: set_grid_voltage,
                               SET_LOAD: set_load,

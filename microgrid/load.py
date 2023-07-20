@@ -31,6 +31,6 @@ if __name__ == '__main__':
     load_demand = Device(name=LOAD_DEMAND,
                          state=STATE,
                          protocol=LOAD_DEMAND_PROTOCOL,
-                         transitions={
+                         actions={
                              SET_LOAD: set_load
                          })

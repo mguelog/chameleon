@@ -5,7 +5,7 @@ from utils import *
 buffer = Buffer()
 
 if __name__ == '__main__':
-    load_demand = Device(name=SOLAR_ARRAY,
+    solar_array = Device(name=SOLAR_ARRAY,
                          state=STATE,
                          protocol=SOLAR_ARRAY_PROTOCOL,
-                         transitions={})
+                         actions={})

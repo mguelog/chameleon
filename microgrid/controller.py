@@ -72,7 +72,7 @@ if __name__ == '__main__':
     microgrid_controller = Device(name=MICROGRID_CONTROLLER,
                                   state=STATE,
                                   protocol=MICROGRID_CONTROLLER_PROTOCOL,
-                                  transitions={
+                                  actions={
                                       CLOCK_TICK: clock_tick,
                                       TOGGLE_ISLAND: toggle_island,
                                       TOGGLE_PEAK_SHAVING: toggle_peak_shaving,

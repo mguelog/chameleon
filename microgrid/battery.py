@@ -126,7 +126,7 @@ if __name__ == '__main__':
     battery_storage = Device(name=ENERGY_STORAGE,
                              state=STATE,
                              protocol=ENERGY_STORAGE_PROTOCOL,
-                             transitions={
+                             actions={
                                  TOGGLE_ISLAND: toggle_island,
                                  TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                                  SET_LOAD: set_load,

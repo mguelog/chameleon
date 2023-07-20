@@ -7,7 +7,7 @@ buffer = Buffer()
 cycle = []
 
 manager = Manager(
-    transitions={},
-    simulation=cycle,
-    times=1,
+    cycle_actions=cycle,
+    external_actions={},
+    cycles=1,
     table=NAME)
