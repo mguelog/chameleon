@@ -126,8 +126,10 @@ CREATE TABLE microgrid_table (
     PRIMARY KEY (name, pid)
 );
 """
+
+SECONDS_PER_TICK = 600
 INIT_SCHEMA = """
-    INSERT INTO microgrid_table VALUES (1, 'TIME', 0);
+    INSERT INTO microgrid_table VALUES (1, 'TIME', -{});
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_POWER', 0);
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_VOLTAGE', 45000);
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_CURRENT', 0);
@@ -136,7 +138,7 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_CURRENT', 0);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_ENERGY', 250);
     INSERT INTO microgrid_table VALUES (1, 'LOAD_DEMAND_POWER', 500);
-"""
+""".format(SECONDS_PER_TICK)
 
 # events
 CLOCK_TICK = 'clock_tick'
@@ -152,4 +154,5 @@ TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
 
 # variables
 UTILITY_GRID_MAX_POWER = 500
-TICK_TIME = 30 / 3600
+SECONDS_A_DAY = 86400
+TICK_TIME = SECONDS_PER_TICK / 3600

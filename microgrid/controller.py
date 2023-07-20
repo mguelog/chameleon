@@ -9,14 +9,19 @@ TIME = ('TIME', 1)
 UTILITY_GRID_POWER = ('UTILITY_GRID_POWER', 1)
 ENERGY_STORAGE_POWER = ('ENERGY_STORAGE_POWER', 1)
 
-tick = 1
+tick_time = SECONDS_PER_TICK
+max_time = SECONDS_A_DAY
 peak_shaved = 1
 islanded = 0
 
 
 def clock_tick(self):
     time = self.get(TIME)
-    time += tick
+    time += tick_time
+
+    if time >= max_time:
+        time = 0
+
     self.set(TIME, time)
     print('DEBUG: {} set TIME: {}'.format(MICROGRID_CONTROLLER, time))
 
