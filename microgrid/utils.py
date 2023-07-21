@@ -156,6 +156,7 @@ SET_SOLAR_POWER = 'set_solar_power'
 SET_LOAD = 'set_load'
 PEAK_SHAVING = 'peak_shaving'
 CONSUME_BATTERY = 'consume_battery'
+RELOAD_BATTERY = 'reload_battery'
 
 # external actions
 TOGGLE_ISLAND = 'toggle_island'

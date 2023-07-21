@@ -10,6 +10,7 @@ ENERGY_STORAGE_CURRENT = ('ENERGY_STORAGE_CURRENT', 1)
 ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
+SOLAR_ARRAY_POWER = ('SOLAR_ARRAY_POWER', 1)
 
 peak_shaved = 1
 islanded = 0
@@ -21,7 +22,7 @@ MIN_VOLTAGE = NOMINAL_VOLTAGE - NOMINAL_VOLTAGE * 0.3
 MAX_VOLTAGE = NOMINAL_VOLTAGE + NOMINAL_VOLTAGE * 0.3
 VOLTAGE_RANGE = MAX_VOLTAGE - MIN_VOLTAGE
 
-MAX_ENERGY = 250
+RECHARGING_EFFICIENCY = 1
 
 
 def toggle_island(self):
@@ -108,10 +109,29 @@ def consume_battery(self):
     energy = self.get(ENERGY_STORAGE_ENERGY)
 
     energy = round(energy - power * TICK_TIME, 2)
-    if energy < 0:
-        energy = 0
 
-    voltage = round((energy / MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+    voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+
+    self.set(ENERGY_STORAGE_ENERGY, energy)
+    print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
+
+    self.set(ENERGY_STORAGE_VOLTAGE, voltage)
+    print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+
+    buffer.free()
+
+
+def reload_battery(self):
+    energy = self.get(ENERGY_STORAGE_ENERGY)
+    solar_power = self.get(SOLAR_ARRAY_POWER)
+
+    solar_energy = solar_power * TICK_TIME
+    energy = round(energy + solar_energy * RECHARGING_EFFICIENCY, 2)
+
+    if energy > ENERGY_STORAGE_MAX_ENERGY:
+        energy = ENERGY_STORAGE_MAX_ENERGY
+
+    voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
 
     self.set(ENERGY_STORAGE_ENERGY, energy)
     print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
@@ -131,5 +151,6 @@ if __name__ == '__main__':
                                  TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                                  SET_LOAD: set_load,
                                  PEAK_SHAVING: peak_shaving,
-                                 CONSUME_BATTERY: consume_battery
+                                 CONSUME_BATTERY: consume_battery,
+                                 RELOAD_BATTERY: reload_battery
                              })
