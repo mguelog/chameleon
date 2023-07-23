@@ -123,6 +123,7 @@ def consume_battery(self):
 
 def reload_battery(self):
     energy = self.get(ENERGY_STORAGE_ENERGY)
+    power = self.get(ENERGY_STORAGE_POWER)
     solar_power = self.get(SOLAR_ARRAY_POWER)
 
     solar_energy = solar_power * TICK_TIME
@@ -131,13 +132,28 @@ def reload_battery(self):
     if energy > ENERGY_STORAGE_MAX_ENERGY:
         energy = ENERGY_STORAGE_MAX_ENERGY
 
+    if energy < 0:
+        energy = 0
+
+        if power >= solar_power:
+            power = solar_power
+        else:
+            energy = (solar_energy - power) * TICK_TIME
+
+        self.set(ENERGY_STORAGE_POWER, power)
+        print('DEBUG: {} set ENERGY_STORAGE_POWER: {}'.format(ENERGY_STORAGE, power))
+
     voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+    current = round((power * 1000) / voltage, 2)
 
     self.set(ENERGY_STORAGE_ENERGY, energy)
     print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
 
     self.set(ENERGY_STORAGE_VOLTAGE, voltage)
     print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+
+    self.set(ENERGY_STORAGE_CURRENT, current)
+    print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
 
     buffer.free()
 
