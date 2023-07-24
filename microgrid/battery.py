@@ -15,7 +15,7 @@ SOLAR_ARRAY_POWER = ('SOLAR_ARRAY_POWER', 1)
 peak_shaved = 1
 islanded = 0
 
-MAX_POWER = 1000
+MAX_POWER = 800
 
 NOMINAL_VOLTAGE = 5000
 MIN_VOLTAGE = NOMINAL_VOLTAGE - NOMINAL_VOLTAGE * 0.3
@@ -33,7 +33,7 @@ def toggle_island(self):
     islanded = float(self.receive(ENERGY_STORAGE_POWER, ENERGY_STORAGE_ADDR))
     print('DEBUG: {} receive ENERGY_STORAGE islanded: {}'.format(ENERGY_STORAGE, islanded))
 
-    buffer.free()
+    buffer.wait()
 
 
 def toggle_peak_shaving(self):

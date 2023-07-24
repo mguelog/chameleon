@@ -23,7 +23,7 @@ def toggle_island(self):
 
     global islanded
     islanded = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
-    print('DEBUG: {} receive ENERGY_STORAGE islanded: {}'.format(UTILITY_GRID, islanded))
+    print('DEBUG: {} receive UTILITY_GRID islanded: {}'.format(UTILITY_GRID, islanded))
 
     buffer.wait()
 

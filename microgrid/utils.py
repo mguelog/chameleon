@@ -82,7 +82,7 @@ LOAD_DEMAND_PROTOCOL = {
 DIESEL_GENERATOR_MAC = '00:00:00:00:00:05'
 DIESEL_GENERATOR_ADDR = '10.0.0.5'
 DIESEL_GENERATOR_TAGS = (
-)
+    ('DIESEL_GENERATOR_POWER', 1, 'REAL'),)
 DIESEL_GENERATOR_SERVER = {
     'address': DIESEL_GENERATOR_ADDR,
     'tags': DIESEL_GENERATOR_TAGS
@@ -138,6 +138,7 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_CURRENT', 0);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_ENERGY', 300);
     INSERT INTO microgrid_table VALUES (1, 'SOLAR_ARRAY_POWER', 0);
+    INSERT INTO microgrid_table VALUES (1, 'DIESEL_GENERATOR_POWER', 0);
     INSERT INTO microgrid_table VALUES (1, 'LOAD_DEMAND_POWER', 500);
 """.format(SECONDS_PER_TICK)
 
@@ -158,6 +159,7 @@ SET_LOAD = 'set_load'
 PEAK_SHAVING = 'peak_shaving'
 CONSUME_BATTERY = 'consume_battery'
 RELOAD_BATTERY = 'reload_battery'
+GENERATOR_SUPPLY = 'generator_supply'
 
 # external actions
 TOGGLE_ISLAND = 'toggle_island'
