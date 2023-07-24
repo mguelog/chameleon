@@ -106,10 +106,12 @@ def peak_shaving(self):
 
 
 def consume_battery(self):
-    power = self.get(ENERGY_STORAGE_POWER)
     energy = self.get(ENERGY_STORAGE_ENERGY)
+    power = self.get(ENERGY_STORAGE_POWER)
+    solar_array_power = self.get(SOLAR_ARRAY_POWER)
 
-    energy = round(energy - power * DELTA_TIME, 2)
+    consumed_energy = (solar_array_power - power) * DELTA_TIME
+    energy = round(energy + consumed_energy, 2)
 
     voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
 
@@ -125,19 +127,20 @@ def consume_battery(self):
 def reload_battery(self):
     energy = self.get(ENERGY_STORAGE_ENERGY)
     power = self.get(ENERGY_STORAGE_POWER)
-    solar_array_power = self.get(SOLAR_ARRAY_POWER)
     diesel_generator_power = self.get(DIESEL_GENERATOR_POWER)
 
-    solar_energy = solar_array_power * DELTA_TIME
     diesel_generator_energy = diesel_generator_power * DELTA_TIME
-    reload_energy = solar_energy + diesel_generator_energy
 
-    energy = round(energy + reload_energy * RECHARGING_EFFICIENCY, 2)
+    energy = round(energy + diesel_generator_energy * RECHARGING_EFFICIENCY, 2)
 
     if energy > ENERGY_STORAGE_MAX_ENERGY:
         energy = ENERGY_STORAGE_MAX_ENERGY
 
     if energy < 0:
+        solar_array_power = self.get(SOLAR_ARRAY_POWER)
+        solar_energy = solar_array_power * DELTA_TIME
+        reload_energy = round(diesel_generator_energy + solar_energy, 2)
+
         energy = 0
         power = reload_energy
 

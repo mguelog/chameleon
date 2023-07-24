@@ -80,14 +80,10 @@ def peak_shaving(self):
 
 
 def generator_supply(self):
-    load_demand_power = self.get(LOAD_DEMAND_POWER)
-    utility_grid_power = self.get(UTILITY_GRID_POWER)
-    energy_storage_power = self.get(ENERGY_STORAGE_POWER)
     energy_storage_energy = self.get(ENERGY_STORAGE_ENERGY)
-
     demand = 0
 
-    if load_demand_power > (utility_grid_power + energy_storage_power) or energy_storage_energy < 0:
+    if energy_storage_energy < 0:
         demand = 1
 
     self.send(DIESEL_GENERATOR_POWER, demand, DIESEL_GENERATOR_ADDR)
