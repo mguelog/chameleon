@@ -164,3 +164,4 @@ GENERATOR_SUPPLY = 'generator_supply'
 # external actions
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
+TOGGLE_CLOUDY = 'toggle_cloudy'
