@@ -10,6 +10,7 @@ LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
 UTILITY_GRID_POWER = ('UTILITY_GRID_POWER', 1)
 ENERGY_STORAGE_POWER = ('ENERGY_STORAGE_POWER', 1)
 DIESEL_GENERATOR_POWER = ('DIESEL_GENERATOR_POWER', 1)
+ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 tick_time = SECONDS_PER_TICK
 max_time = SECONDS_A_DAY
@@ -82,10 +83,11 @@ def generator_supply(self):
     load_demand_power = self.get(LOAD_DEMAND_POWER)
     utility_grid_power = self.get(UTILITY_GRID_POWER)
     energy_storage_power = self.get(ENERGY_STORAGE_POWER)
+    energy_storage_energy = self.get(ENERGY_STORAGE_ENERGY)
 
     demand = 0
 
-    if load_demand_power > (utility_grid_power + energy_storage_power):
+    if load_demand_power > (utility_grid_power + energy_storage_power) or energy_storage_energy < 0:
         demand = 1
 
     self.send(DIESEL_GENERATOR_POWER, demand, DIESEL_GENERATOR_ADDR)

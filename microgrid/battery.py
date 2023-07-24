@@ -11,6 +11,7 @@ ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
 SOLAR_ARRAY_POWER = ('SOLAR_ARRAY_POWER', 1)
+DIESEL_GENERATOR_POWER = ('DIESEL_GENERATOR_POWER', 1)
 
 peak_shaved = 1
 islanded = 0
@@ -124,17 +125,21 @@ def consume_battery(self):
 def reload_battery(self):
     energy = self.get(ENERGY_STORAGE_ENERGY)
     power = self.get(ENERGY_STORAGE_POWER)
-    solar_power = self.get(SOLAR_ARRAY_POWER)
+    solar_array_power = self.get(SOLAR_ARRAY_POWER)
+    diesel_generator_power = self.get(DIESEL_GENERATOR_POWER)
 
-    solar_energy = solar_power * DELTA_TIME
-    energy = round(energy + solar_energy * RECHARGING_EFFICIENCY, 2)
+    solar_energy = solar_array_power * DELTA_TIME
+    diesel_generator_energy = diesel_generator_power * DELTA_TIME
+    reload_energy = solar_energy + diesel_generator_energy
+
+    energy = round(energy + reload_energy * RECHARGING_EFFICIENCY, 2)
 
     if energy > ENERGY_STORAGE_MAX_ENERGY:
         energy = ENERGY_STORAGE_MAX_ENERGY
 
     if energy < 0:
         energy = 0
-        power = solar_power
+        power = reload_energy
 
         self.set(ENERGY_STORAGE_POWER, power)
         print('DEBUG: {} set ENERGY_STORAGE_POWER: {}'.format(ENERGY_STORAGE, power))
