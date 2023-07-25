@@ -12,6 +12,8 @@ ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
 SOLAR_ARRAY_POWER = ('SOLAR_ARRAY_POWER', 1)
 DIESEL_GENERATOR_POWER = ('DIESEL_GENERATOR_POWER', 1)
+UTILITY_GRID_POWER = ('UTILITY_GRID_POWER', 1)
+TIME = ('TIME', 1)
 
 peak_shaved = 1
 islanded = 0
@@ -162,6 +164,36 @@ def reload_battery(self):
     buffer.free()
 
 
+def night_reload(self):
+    buffer.delay()
+    buffer.delay()
+
+    energy = self.get(ENERGY_STORAGE_ENERGY)
+    power = self.get(ENERGY_STORAGE_POWER)
+    utility_gird_power = self.get(UTILITY_GRID_POWER)
+    load_demand_power = self.get(LOAD_DEMAND_POWER)
+    reload_energy = 0
+
+    if load_demand_power < utility_gird_power:
+        reload_power = utility_gird_power - load_demand_power
+        reload_energy = reload_power * DELTA_TIME
+
+    energy = round(energy + reload_energy, 2)
+    voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+    current = round((power * 1000) / voltage, 2)
+
+    self.set(ENERGY_STORAGE_ENERGY, energy)
+    print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
+
+    self.set(ENERGY_STORAGE_VOLTAGE, voltage)
+    print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+
+    self.set(ENERGY_STORAGE_CURRENT, current)
+    print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
+
+    buffer.free()
+
+
 if __name__ == '__main__':
     battery_storage = Device(name=ENERGY_STORAGE,
                              state=STATE,
@@ -172,5 +204,6 @@ if __name__ == '__main__':
                                  SET_LOAD: set_load,
                                  PEAK_SHAVING: peak_shaving,
                                  CONSUME_BATTERY: consume_battery,
-                                 RELOAD_BATTERY: reload_battery
+                                 RELOAD_BATTERY: reload_battery,
+                                 NIGHT_RELOAD: night_reload
                              })

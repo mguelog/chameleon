@@ -92,6 +92,25 @@ def generator_supply(self):
     buffer.wait()
 
 
+def night_reload(self):
+    global islanded
+    print('DEBUG: {} islanded status: {}'.format(UTILITY_GRID, islanded))
+
+    time = self.get(TIME)
+    energy_storage_energy = self.get(ENERGY_STORAGE_ENERGY)
+    utility_grid_power = self.get(UTILITY_GRID_POWER)
+    reload = 0
+
+    if START_NIGHT_RELOAD <= time <= END_NIGHT_RELOAD and energy_storage_energy < MAX_RELOAD_ENERGY:
+        if islanded == 0 and utility_grid_power < UTILITY_GRID_MAX_POWER:
+            reload = 1
+
+    self.send(UTILITY_GRID_POWER, reload, UTILITY_GRID_ADDR)
+    print('DEBUG: {} demanded UTILITY_GRID reload: {}'.format(MICROGRID_CONTROLLER, reload))
+
+    buffer.wait()
+
+
 if __name__ == '__main__':
     microgrid_controller = Device(name=MICROGRID_CONTROLLER,
                                   state=STATE,
@@ -101,5 +120,6 @@ if __name__ == '__main__':
                                       TOGGLE_ISLAND: toggle_island,
                                       TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
                                       PEAK_SHAVING: peak_shaving,
-                                      GENERATOR_SUPPLY: generator_supply
+                                      GENERATOR_SUPPLY: generator_supply,
+                                      NIGHT_RELOAD: night_reload
                                   })

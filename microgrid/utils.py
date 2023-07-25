@@ -151,6 +151,10 @@ ENERGY_STORAGE_MAX_ENERGY = 750
 SECONDS_A_DAY = 24 * 3600
 DELTA_TIME = SECONDS_PER_TICK / 3600
 
+MAX_RELOAD_ENERGY = 300
+START_NIGHT_RELOAD = 14400
+END_NIGHT_RELOAD = 18000
+
 # cycle actions
 CLOCK_TICK = 'clock_tick'
 
@@ -162,6 +166,7 @@ PEAK_SHAVING = 'peak_shaving'
 CONSUME_BATTERY = 'consume_battery'
 RELOAD_BATTERY = 'reload_battery'
 GENERATOR_SUPPLY = 'generator_supply'
+NIGHT_RELOAD = 'night_reload'
 
 # external actions
 TOGGLE_ISLAND = 'toggle_island'

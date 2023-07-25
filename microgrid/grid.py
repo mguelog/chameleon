@@ -10,6 +10,8 @@ UTILITY_GRID_VOLTAGE = ('UTILITY_GRID_VOLTAGE', 1)
 UTILITY_GRID_CURRENT = ('UTILITY_GRID_CURRENT', 1)
 
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
+TIME = ('TIME', 1)
+ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 islanded = 0
 
@@ -68,6 +70,26 @@ def set_load(self):
         buffer.wait()
 
 
+def night_reload(self):
+    buffer.delay()
+
+    reload = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
+    print('DEBUG: {} was demanded by MICROGRID_CONTROLLER reload: {}'.format(UTILITY_GRID, reload))
+
+    if reload == 1:
+        power = UTILITY_GRID_MAX_POWER
+        voltage = self.get(UTILITY_GRID_VOLTAGE)
+        current = round((power * 1000) / voltage, 2)
+
+        self.set(UTILITY_GRID_CURRENT, current)
+        print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(UTILITY_GRID, current))
+
+        self.set(UTILITY_GRID_POWER, power)
+        print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(UTILITY_GRID, power))
+
+    buffer.wait()
+
+
 if __name__ == '__main__':
     utility_grid = Device(name=UTILITY_GRID,
                           state=STATE,
@@ -76,4 +98,5 @@ if __name__ == '__main__':
                               TOGGLE_ISLAND: toggle_island,
                               SET_GRID_VOLTAGE: set_grid_voltage,
                               SET_LOAD: set_load,
+                              NIGHT_RELOAD: night_reload
                           })
