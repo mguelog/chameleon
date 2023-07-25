@@ -5,11 +5,14 @@ from utils import *
 buffer = Buffer()
 
 DIESEL_GENERATOR_POWER = ('DIESEL_GENERATOR_POWER', 1)
+DIESEL_GENERATOR_FUEL = ('DIESEL_GENERATOR_FUEL', 1)
 
 islanded = 0
 
 MIN_POWER = 300
 MAX_POWER = 800
+
+FUEL_PER_KWH = 10
 
 
 def toggle_island(self):
@@ -39,6 +42,20 @@ def generator_supply(self):
             power = MIN_POWER
         else:
             power = MAX_POWER
+
+        fuel = self.get(DIESEL_GENERATOR_FUEL)
+        print(fuel)
+        consumed_fuel = power * DELTA_TIME * FUEL_PER_KWH
+        print(consumed_fuel)
+        fuel = round(fuel - consumed_fuel, 2)
+        print(fuel)
+
+        if fuel <= 0:
+            fuel = 0
+            power = 0
+
+        self.set(DIESEL_GENERATOR_FUEL, fuel)
+        print('DEBUG: {} set DIESEL_GENERATOR_FUEL: {}'.format(DIESEL_GENERATOR, fuel))
 
     self.set(DIESEL_GENERATOR_POWER, power)
     print('DEBUG: {} set DIESEL_GENERATOR_POWER: {}'.format(DIESEL_GENERATOR, power))
