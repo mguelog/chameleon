@@ -29,4 +29,20 @@ simulate_parser.add_argument(
     action='store_true'
 )
 
+simulate_parser = subparsers.add_parser(
+    'collect',
+    description='Collect data from scripted routine by executing collect.py',
+    help='collect data from scripted routine by executing collect.py'
+)
+simulate_parser.add_argument(
+    '-l', '--log',
+    help='create new log files',
+    action='store_true'
+)
+simulate_parser.add_argument(
+    '-n', '--new',
+    help='create new data files',
+    action='store_true'
+)
+
 args = parser.parse_args()
