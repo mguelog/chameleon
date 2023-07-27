@@ -1,10 +1,10 @@
 from chameleon.simulation.buffer import Buffer
+from chameleon.simulation.state import State
 from chameleon.simulation.logger import Logger
 from threading import Thread
 import queue
 
 buffer = Buffer()
-logger = Logger()
 
 
 class Manager:
@@ -13,16 +13,17 @@ class Manager:
         self.cycle_actions = cycle_actions
         self.external_actions = external_actions
         self.cycles = cycles
-        self.table = table
+        self.state = State(table)
 
+        self.logger = Logger(self.state)
         self.queue = queue.Queue()
         self.running = True
 
         buffer.create()
 
-    def cycle_loop(self):
+    def cycle_loop(self, cycles):
 
-        for i in range(self.cycles):
+        for i in range(cycles):
 
             if buffer.is_exited():
                 break
@@ -33,21 +34,22 @@ class Manager:
 
                 external_action = self.queue.get()
 
-                logger.log_state(external_action, self.table)
-                logger.log_cycle(external_action, None)
+                self.logger.log_state(external_action)
+                self.logger.log_cycle(external_action)
+
                 buffer.write(external_action)
 
             for cycle_action in self.cycle_actions:
                 while not buffer.is_free():
                     pass
 
-                logger.log_state(cycle_action, self.table)
+                self.logger.log_state(cycle_action)
                 buffer.write(cycle_action)
 
             while not buffer.is_free():
                 pass
 
-            logger.log_cycle(None, self.table)
+            self.logger.log_cycle(None)
 
         self.running = False
 
@@ -65,7 +67,7 @@ class Manager:
 
         external_action_thread = Thread(target=self.external_action_input)
         external_action_thread.start()
-        self.cycle_loop()
+        self.cycle_loop(self.cycles)
 
         print('\nSimulation terminated')
         print('Enter for terminate')
