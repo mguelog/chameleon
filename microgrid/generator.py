@@ -12,6 +12,7 @@ islanded = 0
 MIN_POWER = 300
 MAX_POWER = 800
 
+MAX_FUEL = 10000
 FUEL_PER_KWH = 10
 
 
@@ -23,6 +24,15 @@ def toggle_island(self):
     global islanded
     islanded = float(self.receive(DIESEL_GENERATOR_POWER, DIESEL_GENERATOR_ADDR))
     print('DEBUG: {} receive DIESEL_GENERATOR islanded: {}'.format(DIESEL_GENERATOR, islanded))
+
+    buffer.free()
+
+
+def refuel_generator(self):
+    fuel = MAX_FUEL
+
+    self.set(DIESEL_GENERATOR_FUEL, fuel)
+    print('DEBUG: {} set DIESEL_GENERATOR_FUEL: {}'.format(DIESEL_GENERATOR, fuel))
 
     buffer.free()
 
@@ -69,5 +79,6 @@ if __name__ == '__main__':
                               protocol=DIESEL_GENERATOR_PROTOCOL,
                               actions={
                                   TOGGLE_ISLAND: toggle_island,
-                                  GENERATOR_SUPPLY: generator_supply
+                                  REFUEL_GENERATOR: refuel_generator,
+                                  GENERATOR_SUPPLY: generator_supply,
                               })

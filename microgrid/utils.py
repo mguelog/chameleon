@@ -137,7 +137,7 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_POWER', 0);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_VOLTAGE', 6500);
     INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_CURRENT', 0);
-    INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_ENERGY', 300);
+    INSERT INTO microgrid_table VALUES (1, 'ENERGY_STORAGE_ENERGY', 0);
     INSERT INTO microgrid_table VALUES (1, 'SOLAR_ARRAY_POWER', 0);
     INSERT INTO microgrid_table VALUES (1, 'DIESEL_GENERATOR_POWER', 0);
     INSERT INTO microgrid_table VALUES (1, 'DIESEL_GENERATOR_FUEL', 10000);
@@ -146,14 +146,14 @@ INIT_SCHEMA = """
 
 # variables
 UTILITY_GRID_MAX_POWER = 500
-ENERGY_STORAGE_MAX_ENERGY = 750
+ENERGY_STORAGE_MAX_ENERGY = 1000
 
 SECONDS_A_DAY = 24 * 3600
 DELTA_TIME = SECONDS_PER_TICK / 3600
 
-MAX_RELOAD_ENERGY = 300
-START_NIGHT_RELOAD = 14400
-END_NIGHT_RELOAD = 18000
+MAX_RELOAD_ENERGY = 500
+START_NIGHT_RELOAD = 12600
+END_NIGHT_RELOAD = 19800
 
 # cycle actions
 CLOCK_TICK = 'clock_tick'
@@ -164,11 +164,12 @@ SET_SOLAR_POWER = 'set_solar_power'
 SET_LOAD = 'set_load'
 PEAK_SHAVING = 'peak_shaving'
 CONSUME_BATTERY = 'consume_battery'
-RELOAD_BATTERY = 'reload_battery'
 GENERATOR_SUPPLY = 'generator_supply'
+RELOAD_BATTERY = 'reload_battery'
 NIGHT_RELOAD = 'night_reload'
 
 # external actions
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
 TOGGLE_CLOUDY = 'toggle_cloudy'
+REFUEL_GENERATOR = 'refuel_generator'
