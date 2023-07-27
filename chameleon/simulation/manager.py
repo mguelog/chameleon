@@ -39,6 +39,13 @@ class Manager:
 
                 buffer.write(external_action)
 
+                if external_action == buffer.EXIT:
+                    self.running = False
+                    break
+
+            if not self.running:
+                break
+
             for cycle_action in self.cycle_actions:
                 while not buffer.is_free():
                     pass
@@ -59,6 +66,8 @@ class Manager:
             for external_action in external_actions:
                 if external_action in self.external_actions:
                     self.queue.put(external_action)
+                elif external_action == buffer.EXIT:
+                    self.queue.put(buffer.EXIT)
                 elif self.running:
                     print('Action {} not found'.format(external_action))
 
