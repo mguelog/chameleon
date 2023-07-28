@@ -24,7 +24,7 @@ class Manager:
 
         buffer.create()
 
-    def cycle_loop(self, cycles, collect_cycle, select):
+    def cycle_loop(self, cycles, collect_cycle, select, custom_cycle):
 
         self.running = True
 
@@ -54,7 +54,12 @@ class Manager:
             if not self.running:
                 break
 
-            for cycle_action in self.cycle_actions:
+            cycle_actions = self.cycle_actions
+
+            if custom_cycle is not None:
+                cycle_actions = custom_cycle
+
+            for cycle_action in cycle_actions:
                 while not buffer.is_free():
                     pass
 
