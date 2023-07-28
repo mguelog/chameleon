@@ -112,7 +112,7 @@ def consume_battery(self):
     power = self.get(ENERGY_STORAGE_POWER)
     solar_array_power = self.get(SOLAR_ARRAY_POWER)
 
-    consumed_energy = (solar_array_power - power) * DELTA_TIME
+    consumed_energy = (solar_array_power * RECHARGING_EFFICIENCY - power) * DELTA_TIME
     energy = round(energy + consumed_energy, 2)
 
     voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
@@ -140,11 +140,10 @@ def reload_battery(self):
 
     if energy < 0:
         solar_array_power = self.get(SOLAR_ARRAY_POWER)
-        solar_energy = solar_array_power * DELTA_TIME
-        reload_energy = round(diesel_generator_energy + solar_energy, 2)
+        reload_power = round(diesel_generator_power + solar_array_power, 2)
 
         energy = 0
-        power = reload_energy
+        power = reload_power
 
         self.set(ENERGY_STORAGE_POWER, power)
         print('DEBUG: {} set ENERGY_STORAGE_POWER: {}'.format(ENERGY_STORAGE, power))
@@ -165,6 +164,7 @@ def reload_battery(self):
 
 
 def night_reload(self):
+    buffer.delay()
     buffer.delay()
     buffer.delay()
 
