@@ -12,8 +12,8 @@ islanded = 0
 MIN_POWER = 300
 MAX_POWER = 800
 
-MAX_FUEL = 10000
-FUEL_PER_KWH = 10
+MAX_FUEL = 1000
+KWH_PER_FUEL_LITRE = 10
 
 
 def toggle_island(self):
@@ -54,15 +54,13 @@ def generator_supply(self):
             power = MAX_POWER
 
         fuel = self.get(DIESEL_GENERATOR_FUEL)
-        print(fuel)
-        consumed_fuel = power * DELTA_TIME * FUEL_PER_KWH
-        print(consumed_fuel)
-        fuel = round(fuel - consumed_fuel, 2)
-        print(fuel)
+        consumed_fuel = power * DELTA_TIME * (1 / KWH_PER_FUEL_LITRE)
 
-        if fuel <= 0:
+        if consumed_fuel >= fuel:
+            power = round(fuel * KWH_PER_FUEL_LITRE, 2)
             fuel = 0
-            power = 0
+        else:
+            fuel = round(fuel - consumed_fuel, 2)
 
         self.set(DIESEL_GENERATOR_FUEL, fuel)
         print('DEBUG: {} set DIESEL_GENERATOR_FUEL: {}'.format(DIESEL_GENERATOR, fuel))
