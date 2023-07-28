@@ -12,6 +12,9 @@ class Collector:
     def set_state(self, updates):
         self.state.set_state(updates)
 
+    def get_values(self, select):
+        return self.state.get_values(select)
+
     def run_cycles(self, cycles, collect_cycle, select):
         self.manager.cycle_loop(cycles, collect_cycle, select)
 
@@ -20,6 +23,9 @@ class Collector:
 
     def check_constrain(self, constrain, expected_value):
         self.state.check_constrain(constrain, expected_value)
+
+    def write(self, data):
+        self.dataset.store_data(data)
 
     def new_row(self):
         self.dataset.new_line()

@@ -28,7 +28,7 @@ class State:
             self.connection.commit()
 
     def check_constrain(self, constrain, expected_value):
-        state = self.get_values(constrain)
+        state = self.get_values(constrain.format(self.table))
 
         with open(DATASET, 'a') as file:
             if state == [expected_value]:

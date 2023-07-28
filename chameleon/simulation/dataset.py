@@ -17,6 +17,10 @@ class Dataset:
             with open(DATASET, 'a') as file:
                 file.write(str(state) + ',')
 
+    def store_data(self, data):
+        with open(DATASET, 'a') as file:
+            file.write(data)
+
     def new_line(self):
         with open(DATASET, 'a') as file:
             file.write('\n')
