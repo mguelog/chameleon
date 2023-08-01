@@ -16,6 +16,7 @@ tick_time = SECONDS_PER_TICK
 max_time = SECONDS_A_DAY
 peak_shaved = 1
 islanded = 0
+night_reloaded = 1
 
 
 def clock_tick(self):
@@ -63,6 +64,22 @@ def toggle_peak_shaving(self):
     buffer.wait()
 
 
+def toggle_night_reload(self):
+    global night_reloaded
+    if night_reloaded == 1:
+        night_reloaded = 0
+    else:
+        night_reloaded = 1
+
+    self.send(UTILITY_GRID_POWER, night_reloaded, UTILITY_GRID_ADDR)
+    print('DEBUG: {} set UTILITY_GRID night_reloaded: {}'.format(MICROGRID_CONTROLLER, night_reloaded))
+
+    self.send(ENERGY_STORAGE_POWER, night_reloaded, ENERGY_STORAGE_ADDR)
+    print('DEBUG: {} set ENERGY_STORAGE night_reloaded: {}'.format(MICROGRID_CONTROLLER, night_reloaded))
+
+    buffer.wait()
+
+
 def peak_shaving(self):
     global peak_shaved
     print('DEBUG: {} peak_shaved status: {}'.format(MICROGRID_CONTROLLER, peak_shaved))
@@ -93,20 +110,22 @@ def generator_supply(self):
 
 
 def night_reload(self):
-    global islanded
-    print('DEBUG: {} islanded status: {}'.format(UTILITY_GRID, islanded))
+    global islanded, night_reloaded
+    print('DEBUG: {} islanded status: {}'.format(MICROGRID_CONTROLLER, islanded))
+    print('DEBUG: {} night_reloaded status: {}'.format(MICROGRID_CONTROLLER, night_reloaded))
 
-    time = self.get(TIME)
-    energy_storage_energy = self.get(ENERGY_STORAGE_ENERGY)
-    utility_grid_power = self.get(UTILITY_GRID_POWER)
-    reload = 0
+    if night_reloaded == 1:
+        time = self.get(TIME)
+        energy_storage_energy = self.get(ENERGY_STORAGE_ENERGY)
+        utility_grid_power = self.get(UTILITY_GRID_POWER)
+        reload = 0
 
-    if START_NIGHT_RELOAD <= time <= END_NIGHT_RELOAD and energy_storage_energy < MAX_RELOAD_ENERGY:
-        if islanded == 0 and utility_grid_power < UTILITY_GRID_MAX_POWER:
-            reload = 1
+        if START_NIGHT_RELOAD <= time <= END_NIGHT_RELOAD and energy_storage_energy < MAX_RELOAD_ENERGY:
+            if islanded == 0 and utility_grid_power < UTILITY_GRID_MAX_POWER:
+                reload = 1
 
-    self.send(UTILITY_GRID_POWER, reload, UTILITY_GRID_ADDR)
-    print('DEBUG: {} demanded UTILITY_GRID reload: {}'.format(MICROGRID_CONTROLLER, reload))
+        self.send(UTILITY_GRID_POWER, reload, UTILITY_GRID_ADDR)
+        print('DEBUG: {} demanded UTILITY_GRID reload: {}'.format(MICROGRID_CONTROLLER, reload))
 
     buffer.wait()
 
@@ -119,6 +138,7 @@ if __name__ == '__main__':
                                       CLOCK_TICK: clock_tick,
                                       TOGGLE_ISLAND: toggle_island,
                                       TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
+                                      TOGGLE_NIGHT_RELOAD: toggle_night_reload,
                                       PEAK_SHAVING: peak_shaving,
                                       GENERATOR_SUPPLY: generator_supply,
                                       NIGHT_RELOAD: night_reload

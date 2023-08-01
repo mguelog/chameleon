@@ -128,7 +128,7 @@ CREATE TABLE microgrid_table (
 );
 """
 
-SECONDS_PER_TICK = 120
+SECONDS_PER_TICK = 3600
 INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'TIME', -{});
     INSERT INTO microgrid_table VALUES (1, 'UTILITY_GRID_POWER', 0);
@@ -172,4 +172,5 @@ NIGHT_RELOAD = 'night_reload'
 TOGGLE_ISLAND = 'toggle_island'
 TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
 TOGGLE_CLOUDY = 'toggle_cloudy'
+TOGGLE_NIGHT_RELOAD = 'toggle_night_reload'
 REFUEL_GENERATOR = 'refuel_generator'

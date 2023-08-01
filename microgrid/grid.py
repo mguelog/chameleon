@@ -14,6 +14,7 @@ TIME = ('TIME', 1)
 ENERGY_STORAGE_ENERGY = ('ENERGY_STORAGE_ENERGY', 1)
 
 islanded = 0
+night_reloaded = 1
 
 NOMINAL_VOLTAGE = 45000
 MIN_VOLTAGE = NOMINAL_VOLTAGE - NOMINAL_VOLTAGE * 0.04
@@ -26,6 +27,16 @@ def toggle_island(self):
     global islanded
     islanded = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
     print('DEBUG: {} receive UTILITY_GRID islanded: {}'.format(UTILITY_GRID, islanded))
+
+    buffer.wait()
+
+
+def toggle_night_reload(self):
+    buffer.delay()
+
+    global night_reloaded
+    night_reloaded = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
+    print('DEBUG: {} receive UTILITY_GRID night_reloaded: {}'.format(UTILITY_GRID, night_reloaded))
 
     buffer.wait()
 
@@ -73,19 +84,24 @@ def set_load(self):
 def night_reload(self):
     buffer.delay()
 
-    reload = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
-    print('DEBUG: {} was demanded by MICROGRID_CONTROLLER reload: {}'.format(UTILITY_GRID, reload))
+    global islanded, night_reloaded
+    print('DEBUG: {} islanded status: {}'.format(UTILITY_GRID, islanded))
+    print('DEBUG: {} night_reloaded status: {}'.format(UTILITY_GRID, night_reloaded))
 
-    if reload == 1:
-        power = UTILITY_GRID_MAX_POWER
-        voltage = self.get(UTILITY_GRID_VOLTAGE)
-        current = round((power * 1000) / voltage, 2)
+    if night_reloaded == 1:
+        reload = float(self.receive(UTILITY_GRID_POWER, UTILITY_GRID_ADDR))
+        print('DEBUG: {} was demanded by MICROGRID_CONTROLLER reload: {}'.format(UTILITY_GRID, reload))
 
-        self.set(UTILITY_GRID_CURRENT, current)
-        print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(UTILITY_GRID, current))
+        if reload == 1:
+            power = UTILITY_GRID_MAX_POWER
+            voltage = self.get(UTILITY_GRID_VOLTAGE)
+            current = round((power * 1000) / voltage, 2)
 
-        self.set(UTILITY_GRID_POWER, power)
-        print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(UTILITY_GRID, power))
+            self.set(UTILITY_GRID_CURRENT, current)
+            print('DEBUG: {} set UTILITY_GRID_CURRENT: {}'.format(UTILITY_GRID, current))
+
+            self.set(UTILITY_GRID_POWER, power)
+            print('DEBUG: {} set UTILITY_GRID_POWER: {}'.format(UTILITY_GRID, power))
 
     buffer.wait()
 
@@ -96,6 +112,7 @@ if __name__ == '__main__':
                           protocol=UTILITY_GRID_PROTOCOL,
                           actions={
                               TOGGLE_ISLAND: toggle_island,
+                              TOGGLE_NIGHT_RELOAD: toggle_night_reload,
                               SET_GRID_VOLTAGE: set_grid_voltage,
                               SET_LOAD: set_load,
                               NIGHT_RELOAD: night_reload

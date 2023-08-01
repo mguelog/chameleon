@@ -17,6 +17,7 @@ TIME = ('TIME', 1)
 
 peak_shaved = 1
 islanded = 0
+night_reloaded = 1
 
 MAX_POWER = 800
 
@@ -45,6 +46,17 @@ def toggle_peak_shaving(self):
     global peak_shaved
     peak_shaved = float(self.receive(ENERGY_STORAGE_POWER, ENERGY_STORAGE_ADDR))
     print('DEBUG: {} receive ENERGY_STORAGE peak_shaved: {}'.format(ENERGY_STORAGE, peak_shaved))
+
+    buffer.free()
+
+
+def toggle_night_reload(self):
+    buffer.delay()
+    buffer.delay()
+
+    global night_reloaded
+    night_reloaded = float(self.receive(ENERGY_STORAGE_POWER, ENERGY_STORAGE_ADDR))
+    print('DEBUG: {} receive ENERGY_STORAGE night_reloaded: {}'.format(ENERGY_STORAGE, night_reloaded))
 
     buffer.free()
 
@@ -168,28 +180,33 @@ def night_reload(self):
     buffer.delay()
     buffer.delay()
 
-    energy = self.get(ENERGY_STORAGE_ENERGY)
-    power = self.get(ENERGY_STORAGE_POWER)
-    utility_gird_power = self.get(UTILITY_GRID_POWER)
-    load_demand_power = self.get(LOAD_DEMAND_POWER)
-    reload_energy = 0
+    global islanded, night_reloaded
+    print('DEBUG: {} islanded status: {}'.format(ENERGY_STORAGE, islanded))
+    print('DEBUG: {} night_reloaded status: {}'.format(ENERGY_STORAGE, night_reloaded))
 
-    if load_demand_power < utility_gird_power:
-        reload_power = utility_gird_power - load_demand_power
-        reload_energy = reload_power * DELTA_TIME
+    if night_reloaded == 1:
+        energy = self.get(ENERGY_STORAGE_ENERGY)
+        power = self.get(ENERGY_STORAGE_POWER)
+        utility_gird_power = self.get(UTILITY_GRID_POWER)
+        load_demand_power = self.get(LOAD_DEMAND_POWER)
+        reload_energy = 0
 
-    energy = round(energy + reload_energy, 2)
-    voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
-    current = round((power * 1000) / voltage, 2)
+        if load_demand_power < utility_gird_power:
+            reload_power = utility_gird_power - load_demand_power
+            reload_energy = reload_power * DELTA_TIME
 
-    self.set(ENERGY_STORAGE_ENERGY, energy)
-    print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
+        energy = round(energy + reload_energy, 2)
+        voltage = round((energy / ENERGY_STORAGE_MAX_ENERGY) * VOLTAGE_RANGE + MIN_VOLTAGE, 2)
+        current = round((power * 1000) / voltage, 2)
 
-    self.set(ENERGY_STORAGE_VOLTAGE, voltage)
-    print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+        self.set(ENERGY_STORAGE_ENERGY, energy)
+        print('DEBUG: {} set ENERGY_STORAGE_ENERGY: {}'.format(ENERGY_STORAGE, energy))
 
-    self.set(ENERGY_STORAGE_CURRENT, current)
-    print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
+        self.set(ENERGY_STORAGE_VOLTAGE, voltage)
+        print('DEBUG: {} set ENERGY_STORAGE_VOLTAGE: {}'.format(ENERGY_STORAGE, voltage))
+
+        self.set(ENERGY_STORAGE_CURRENT, current)
+        print('DEBUG: {} set ENERGY_STORAGE_CURRENT: {}'.format(ENERGY_STORAGE, current))
 
     buffer.free()
 
@@ -201,6 +218,7 @@ if __name__ == '__main__':
                              actions={
                                  TOGGLE_ISLAND: toggle_island,
                                  TOGGLE_PEAK_SHAVING: toggle_peak_shaving,
+                                 TOGGLE_NIGHT_RELOAD: toggle_night_reload,
                                  SET_LOAD: set_load,
                                  PEAK_SHAVING: peak_shaving,
                                  CONSUME_BATTERY: consume_battery,
