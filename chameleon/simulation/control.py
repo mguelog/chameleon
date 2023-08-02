@@ -2,7 +2,8 @@ from mininet.net import Mininet
 import sys
 
 
-class Collection:
+class Control:
+
     def __init__(self, name, devices, topo, manager):
         self.name = name
         self.devices = devices
@@ -19,6 +20,6 @@ class Collection:
         self.net.pingAll()
 
         if self.manager is not None:
-            self.manager.collect()
+            self.manager.control()
 
         self.net.stop()

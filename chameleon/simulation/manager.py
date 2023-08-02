@@ -10,11 +10,11 @@ buffer = Buffer()
 
 class Manager:
 
-    def __init__(self, cycle_actions, external_actions, cycles, collection, table):
+    def __init__(self, cycle_actions, external_actions, cycles, control, table):
         self.cycle_actions = cycle_actions
         self.external_actions = external_actions
         self.cycles = cycles
-        self.collection = collection
+        self.control = control
         self.state = State(table)
 
         self.logger = Logger(self.state)
@@ -95,17 +95,17 @@ class Manager:
 
         external_action_thread = Thread(target=self.external_action_input)
         external_action_thread.start()
-        self.cycle_loop(self.cycles, False, None)
+        self.cycle_loop(self.cycles, False, None, None)
 
         print('\nSimulation terminated')
         print('Enter for terminate')
 
         external_action_thread.join()
 
-    def collect(self):
+    def control(self):
         print('Dataset generation started')
 
-        if self.collection is not None:
-            self.collection()
+        if self.control is not None:
+            self.control()
 
         print('Dataset generation terminated')

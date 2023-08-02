@@ -2,7 +2,7 @@ from chameleon.simulation.state import State
 from chameleon.simulation.dataset import Dataset
 
 
-class Collector:
+class Controller:
 
     def __init__(self, manager, table):
         self.state = State(table)
