@@ -2,7 +2,7 @@ import time
 
 
 def short_delay():
-    time.sleep(0.05)
+    time.sleep(0.01)
 
 
 class Buffer:
@@ -10,7 +10,8 @@ class Buffer:
     FREE = 'free'
     WAIT = 'wait'
     EXIT = 'exit'
-    SLEEP = 0.2
+    FAILURE = 'failure'
+    SLEEP = 0.3
 
     def write(self, action):
         with open(self.BUFFER, 'w') as file:

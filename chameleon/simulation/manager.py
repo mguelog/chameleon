@@ -10,10 +10,11 @@ buffer = Buffer()
 
 class Manager:
 
-    def __init__(self, cycle_actions, external_actions, cycles, control, table):
+    def __init__(self, cycle_actions, external_actions, cycles, constraint, control, table):
         self.cycle_actions = cycle_actions
         self.external_actions = external_actions
         self.cycles = cycles
+        self.constraint = constraint
         self.control = control
         self.state = State(table)
 
@@ -47,7 +48,7 @@ class Manager:
 
                 buffer.write(external_action)
 
-                if external_action == buffer.EXIT:
+                if external_action == buffer.EXIT or external_action == buffer.FAILURE:
                     self.running = False
                     break
 
@@ -73,6 +74,10 @@ class Manager:
 
             if collect_cycle:
                 self.dataset.store_cycle(select)
+
+            if self.constraint is not None and not self.constraint():
+                print('System failure by constraint violation')
+                self.queue.put((buffer.FAILURE, False))
 
         self.running = False
 
