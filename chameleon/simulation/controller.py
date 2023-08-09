@@ -16,7 +16,7 @@ class Controller:
         return self.state.get_values(select)
 
     def run_cycles(self, cycles, collect_cycle, select, custom_cycle):
-        self.manager.cycle_loop(cycles, collect_cycle, select, custom_cycle)
+        return self.manager.cycle_loop(cycles, collect_cycle, select, custom_cycle)
 
     def run_action(self, action, collect_action):
         self.manager.run_action(action, collect_action)
