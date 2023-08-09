@@ -26,7 +26,7 @@ def main():
 
         subprocess.run(['sudo', 'python3.10', 'simulate.py'])
 
-    elif args.command == 'collect':
+    elif args.command == 'control':
         if args.log:
             try:
                 os.remove(STATE_LOG)
@@ -39,7 +39,7 @@ def main():
             except FileNotFoundError:
                 print('Not previous data files found')
 
-        subprocess.run(['sudo', 'python3.10', 'collect.py'])
+        subprocess.run(['sudo', 'python3.10', 'control.py'])
 
 
 if __name__ == '__main__':

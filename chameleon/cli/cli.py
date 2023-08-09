@@ -30,9 +30,9 @@ simulate_parser.add_argument(
 )
 
 simulate_parser = subparsers.add_parser(
-    'collect',
-    description='Collect data from scripted routine by executing collect.py',
-    help='collect data from scripted routine by executing collect.py'
+    'control',
+    description='Run system custom control routine by executing control.py',
+    help='run system custom control routine by executing control.py'
 )
 simulate_parser.add_argument(
     '-l', '--log',
