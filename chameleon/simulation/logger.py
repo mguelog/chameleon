@@ -1,12 +1,17 @@
 from chameleon import STATE_LOG, CYCLE_LOG
+import os.path
 
 select_all = 'SELECT value FROM {}'
 
 
 class Logger:
 
-    def __init__(self, state):
+    def __init__(self, state, columns):
         self.state = state
+
+        if not os.path.isfile(CYCLE_LOG):
+            with open(CYCLE_LOG, 'a') as file:
+                file.write(columns + '\n')
 
     def log_state(self, action):
         values = self.state.get_values(select_all)

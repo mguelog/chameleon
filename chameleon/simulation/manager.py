@@ -10,16 +10,16 @@ buffer = Buffer()
 
 class Manager:
 
-    def __init__(self, cycle_actions, external_actions, cycles, constraint, hazard_prediction, control, table):
+    def __init__(self, cycle_actions, external_actions, cycles, constraint, hazard_prediction, table, columns, control):
         self.cycle_actions = cycle_actions
         self.external_actions = external_actions
         self.cycles = cycles
         self.constraint = constraint
         self.hazard_prediction = hazard_prediction
-        self.control = control
         self.state = State(table)
+        self.control = control
 
-        self.logger = Logger(self.state)
+        self.logger = Logger(self.state, columns)
         self.dataset = Dataset(self.state)
         self.queue = queue.Queue()
         self.running = True
