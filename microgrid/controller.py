@@ -5,6 +5,7 @@ from utils import *
 buffer = Buffer()
 
 TIME = ('TIME', 1)
+HOURS = ('HOURS', 1)
 
 LOAD_DEMAND_POWER = ('LOAD_DEMAND_POWER', 1)
 UTILITY_GRID_POWER = ('UTILITY_GRID_POWER', 1)
@@ -21,13 +22,19 @@ night_reloaded = 1
 
 def clock_tick(self):
     time = self.get(TIME)
+    hours = self.get(HOURS)
+
     time += tick_time
+    hours = round(hours + tick_time / 3600, 4)
 
     if time >= max_time:
         time = 0
 
     self.set(TIME, time)
     print('DEBUG: {} set TIME: {}'.format(MICROGRID_CONTROLLER, time))
+
+    self.set(HOURS, hours)
+    print('DEBUG: {} set HOURS: {}'.format(MICROGRID_CONTROLLER, hours))
 
     buffer.free()
 
