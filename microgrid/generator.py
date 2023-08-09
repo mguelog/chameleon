@@ -57,7 +57,7 @@ def generator_supply(self):
         consumed_fuel = power * DELTA_TIME * (1 / KWH_PER_FUEL_LITRE)
 
         if consumed_fuel >= fuel:
-            power = round(fuel * KWH_PER_FUEL_LITRE, 2)
+            power = round((fuel * KWH_PER_FUEL_LITRE) / DELTA_TIME, 2)
             fuel = 0
         else:
             fuel = round(fuel - consumed_fuel, 2)
