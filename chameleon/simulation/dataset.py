@@ -15,7 +15,7 @@ class Dataset:
 
         if state is not None:
             with open(DATASET, 'a') as file:
-                file.write(str(state) + ',')
+                file.write(str(state)[1:-1] + ',')
 
     def store_data(self, data):
         with open(DATASET, 'a') as file:
