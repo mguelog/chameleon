@@ -2,6 +2,7 @@ from chameleon.simulation.buffer import Buffer
 from chameleon.simulation.state import State
 from chameleon.simulation.logger import Logger
 from chameleon.simulation.dataset import Dataset
+from chameleon.simulation.controller import Controller
 from threading import Thread
 import queue
 
@@ -21,6 +22,7 @@ class Manager:
 
         self.logger = Logger(self.state, columns)
         self.dataset = Dataset(self.state)
+        self.controller = Controller(self, table)
         self.queue = queue.Queue()
         self.running = True
 
@@ -40,7 +42,7 @@ class Manager:
                 if self.hazard_prediction is None:
                     buffer.write(external_action)
                 else:
-                    if self.hazard_prediction(external_action):
+                    if self.hazard_prediction(self.controller, external_action):
                         buffer.write(external_action)
                     else:
                         return 0

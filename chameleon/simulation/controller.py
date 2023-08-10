@@ -6,7 +6,7 @@ class Controller:
 
     def __init__(self, manager, table):
         self.state = State(table)
-        self.dataset = Dataset(table)
+        self.dataset = Dataset(self.state)
         self.manager = manager
 
     def set_state(self, updates):
