@@ -1,3 +1,4 @@
+from chameleon.simulation.controller import Controller
 from chameleon.simulation.manager import Manager
 from microgrid.utils import *
 
@@ -21,11 +22,25 @@ external_actions = [
     TOGGLE_NIGHT_RELOAD
 ]
 
+
+def constraint():
+    controller = Controller(manager, NAME)
+
+    select = 'SELECT value FROM {} WHERE ' \
+             'name LIKE "UTILITY_GRID_POWER" OR ' \
+             'name LIKE "ENERGY_STORAGE_POWER" OR ' \
+             'name LIKE "LOAD_DEMAND_POWER"'
+
+    [utility_grid_power, energy_storage_power, load_demand_power] = controller.get_values(select)
+
+    return round(utility_grid_power + energy_storage_power, 0) >= round(load_demand_power, 0)
+
+
 manager = Manager(
     cycle_actions=cycle_actions,
     external_actions=external_actions,
     cycles=8,
-    constraint=None,
+    constraint=constraint,
     hazard_prediction=None,
     table=NAME,
     columns=COLUMNS,
