@@ -41,7 +41,7 @@ def constraint():
 
 def control_routine():
     controller = Controller(manager, NAME)
-    toggle_island_hazard_prediction_f_score(controller)
+    toggle_night_reload_hazard_prediction_dataset(controller)
 
 
 manager = Manager(

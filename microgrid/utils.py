@@ -129,7 +129,7 @@ CREATE TABLE microgrid_table (
 );
 """
 
-SECONDS_PER_TICK = 900
+SECONDS_PER_TICK = 3600
 INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'HOURS', -{});
     INSERT INTO microgrid_table VALUES (1, 'TIME', -{});
