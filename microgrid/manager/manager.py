@@ -1,5 +1,6 @@
 from chameleon.simulation.controller import Controller
 from chameleon.simulation.manager import Manager
+from microgrid.manager.dataset_generation import *
 from microgrid.utils import *
 
 cycle_actions = [
@@ -36,6 +37,11 @@ def constraint():
     return round(utility_grid_power + energy_storage_power, 0) >= round(load_demand_power, 0)
 
 
+def control_routine():
+    controller = Controller(manager, NAME)
+    toggle_island_hazard_prediction_dataset(controller)
+
+
 manager = Manager(
     cycle_actions=cycle_actions,
     external_actions=external_actions,
@@ -44,4 +50,4 @@ manager = Manager(
     hazard_prediction=None,
     table=NAME,
     columns=COLUMNS,
-    control=None)
+    control=control_routine)
