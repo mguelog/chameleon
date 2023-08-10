@@ -1,8 +1,5 @@
 from chameleon.simulation.manager import Manager
-from chameleon.simulation.buffer import Buffer
-from utils import *
-
-buffer = Buffer()
+from microgrid.utils import *
 
 cycle_actions = [
     CLOCK_TICK,
@@ -20,11 +17,16 @@ external_actions = [
     TOGGLE_ISLAND,
     TOGGLE_PEAK_SHAVING,
     TOGGLE_CLOUDY,
-    REFUEL_GENERATOR
+    REFUEL_GENERATOR,
+    TOGGLE_NIGHT_RELOAD
 ]
 
 manager = Manager(
     cycle_actions=cycle_actions,
     external_actions=external_actions,
-    cycles=2880,
-    table=NAME)
+    cycles=8,
+    constraint=None,
+    hazard_prediction=None,
+    table=NAME,
+    columns=COLUMNS,
+    control=None)

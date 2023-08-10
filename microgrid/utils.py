@@ -129,7 +129,7 @@ CREATE TABLE microgrid_table (
 );
 """
 
-SECONDS_PER_TICK = 3600
+SECONDS_PER_TICK = 900
 INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'HOURS', -{});
     INSERT INTO microgrid_table VALUES (1, 'TIME', -{});
@@ -145,6 +145,31 @@ INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'DIESEL_GENERATOR_FUEL', 1000);
     INSERT INTO microgrid_table VALUES (1, 'LOAD_DEMAND_POWER', 500);
 """.format(SECONDS_PER_TICK / 3600, SECONDS_PER_TICK)
+
+# columns names
+ACTION_COLUMN = 'a'
+HOURS_COLUMN = 'h'
+TIME_COLUMN = 't'
+UTILITY_GRID_POWER_COLUMN = 'ugp'
+UTILITY_GRID_VOLTAGE_COLUMN = 'ugv'
+UTILITY_GRID_CURRENT_COLUMN = 'ugc'
+ENERGY_STORAGE_POWER_COLUMN = 'esp'
+ENERGY_STORAGE_VOLTAGE_COLUMN = 'esv'
+ENERGY_STORAGE_CURRENT_COLUMN = 'esc'
+ENERGY_STORAGE_ENERGY_COLUMN = 'ese'
+SOLAR_ARRAY_POWER_COLUMN = 'sap'
+DIESEL_GENERATOR_POWER_COLUMN = 'dgp'
+DIESEL_GENERATOR_FUEL_COLUMN = 'dgf'
+LOAD_DEMAND_POWER_COLUMN = 'ldp'
+
+COLUMNS = '{},{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(ACTION_COLUMN, HOURS_COLUMN, TIME_COLUMN,
+                                                             UTILITY_GRID_POWER_COLUMN, UTILITY_GRID_VOLTAGE_COLUMN,
+                                                             UTILITY_GRID_CURRENT_COLUMN, ENERGY_STORAGE_POWER_COLUMN,
+                                                             ENERGY_STORAGE_VOLTAGE_COLUMN,
+                                                             ENERGY_STORAGE_CURRENT_COLUMN,
+                                                             ENERGY_STORAGE_ENERGY_COLUMN, SOLAR_ARRAY_POWER_COLUMN,
+                                                             DIESEL_GENERATOR_POWER_COLUMN,
+                                                             DIESEL_GENERATOR_FUEL_COLUMN, LOAD_DEMAND_POWER_COLUMN)
 
 # variables
 UTILITY_GRID_MAX_POWER = 500
