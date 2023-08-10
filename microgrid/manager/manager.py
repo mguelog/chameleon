@@ -1,6 +1,7 @@
 from chameleon.simulation.controller import Controller
 from chameleon.simulation.manager import Manager
 from microgrid.manager.dataset_generation import *
+from microgrid.manager.hazard_detection import *
 from microgrid.utils import *
 
 cycle_actions = [
@@ -45,9 +46,9 @@ def control_routine():
 manager = Manager(
     cycle_actions=cycle_actions,
     external_actions=external_actions,
-    cycles=8,
+    cycles=1440,
     constraint=constraint,
-    hazard_prediction=None,
+    hazard_prediction=action_hazard_prediction,
     table=NAME,
     columns=COLUMNS,
     control=control_routine)
