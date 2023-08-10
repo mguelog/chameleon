@@ -1,6 +1,6 @@
 from chameleon.simulation.device import Device
 from chameleon.simulation.buffer import Buffer
-from utils import *
+from microgrid.utils import *
 
 buffer = Buffer()
 
