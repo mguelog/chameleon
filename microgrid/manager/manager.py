@@ -1,6 +1,7 @@
 from chameleon.simulation.controller import Controller
 from chameleon.simulation.manager import Manager
 from microgrid.manager.dataset_generation import *
+from microgrid.manager.f_score import *
 from microgrid.manager.hazard_detection import *
 from microgrid.utils import *
 
@@ -40,7 +41,7 @@ def constraint():
 
 def control_routine():
     controller = Controller(manager, NAME)
-    toggle_island_hazard_prediction_dataset(controller)
+    toggle_island_hazard_prediction_f_score(controller)
 
 
 manager = Manager(
@@ -48,7 +49,7 @@ manager = Manager(
     external_actions=external_actions,
     cycles=1440,
     constraint=constraint,
-    hazard_prediction=action_hazard_prediction,
+    hazard_prediction=None,
     table=NAME,
     columns=COLUMNS,
     control=control_routine)
