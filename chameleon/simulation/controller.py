@@ -21,9 +21,6 @@ class Controller:
     def run_action(self, action, collect_action):
         self.manager.run_action(action, collect_action)
 
-    def check_constrain(self, constrain, expected_value):
-        self.state.check_constrain(constrain, expected_value)
-
     def write(self, data):
         self.dataset.store_data(data)
 
