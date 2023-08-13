@@ -8,14 +8,14 @@ class Dataset:
 
     def store_action(self, action):
         with open(DATASET, 'a') as file:
-            file.write(action + ',')
+            file.write(action + ', ')
 
     def store_cycle(self, select):
         state = self.state.get_values(select)
 
         if state is not None:
             with open(DATASET, 'a') as file:
-                file.write(str(state)[1:-1] + ',')
+                file.write(str(state)[1:-1] + ', ')
 
     def store_data(self, data):
         with open(DATASET, 'a') as file:
