@@ -7,6 +7,9 @@ def get_first(tpl):
     return tpl[0]
 
 
+select_all = 'SELECT value FROM {}'
+
+
 class State:
 
     def __init__(self, table):
@@ -18,8 +21,12 @@ class State:
                 break
 
     def get_values(self, select):
-        self.cursor.execute(select.format(self.table))
-        return list(map(get_first, self.cursor.fetchall()))
+        if select is not None:
+            self.cursor.execute(select.format(self.table))
+            return list(map(get_first, self.cursor.fetchall()))
+        else:
+            self.cursor.execute(select_all.format(self.table))
+            return list(map(get_first, self.cursor.fetchall()))
 
     def set_state(self, updates):
         for update in updates:
