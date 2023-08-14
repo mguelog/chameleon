@@ -1,8 +1,8 @@
 from chameleon.simulation.controller import Controller
 from chameleon.simulation.manager import Manager
+from chameleon.simulation.graphic import Graphic
 from microgrid.manager.dataset_generation import *
-from microgrid.manager.f_score import *
-from microgrid.manager.hazard_detection import *
+from microgrid.manager.action_test import *
 from microgrid.utils import *
 
 cycle_actions = [
@@ -41,8 +41,12 @@ def constraint():
 
 def control_routine():
     controller = Controller(manager, NAME)
-    toggle_night_reload_hazard_prediction_dataset(controller)
+    toggle_island_test(controller)
 
+
+graphic = Graphic('Microgrid', HOURS_COLUMN,
+                  [LOAD_DEMAND_POWER_COLUMN, ENERGY_STORAGE_ENERGY_COLUMN, ENERGY_STORAGE_POWER_COLUMN,
+                   UTILITY_GRID_POWER_COLUMN, SOLAR_ARRAY_POWER_COLUMN, DIESEL_GENERATOR_FUEL_COLUMN])
 
 manager = Manager(
     cycle_actions=cycle_actions,
@@ -52,4 +56,5 @@ manager = Manager(
     hazard_prediction=None,
     table=NAME,
     columns=COLUMNS,
+    graphic=graphic,
     control=control_routine)

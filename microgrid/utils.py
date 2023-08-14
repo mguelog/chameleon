@@ -129,7 +129,7 @@ CREATE TABLE microgrid_table (
 );
 """
 
-SECONDS_PER_TICK = 3600
+SECONDS_PER_TICK = 900
 INIT_SCHEMA = """
     INSERT INTO microgrid_table VALUES (1, 'HOURS', -{});
     INSERT INTO microgrid_table VALUES (1, 'TIME', -{});
@@ -148,28 +148,21 @@ INIT_SCHEMA = """
 
 # columns names
 ACTION_COLUMN = 'a'
-HOURS_COLUMN = 'h'
-TIME_COLUMN = 't'
-UTILITY_GRID_POWER_COLUMN = 'ugp'
-UTILITY_GRID_VOLTAGE_COLUMN = 'ugv'
-UTILITY_GRID_CURRENT_COLUMN = 'ugc'
-ENERGY_STORAGE_POWER_COLUMN = 'esp'
-ENERGY_STORAGE_VOLTAGE_COLUMN = 'esv'
-ENERGY_STORAGE_CURRENT_COLUMN = 'esc'
-ENERGY_STORAGE_ENERGY_COLUMN = 'ese'
-SOLAR_ARRAY_POWER_COLUMN = 'sap'
-DIESEL_GENERATOR_POWER_COLUMN = 'dgp'
-DIESEL_GENERATOR_FUEL_COLUMN = 'dgf'
-LOAD_DEMAND_POWER_COLUMN = 'ldp'
+HOURS_COLUMN = ('h', '-w', 'Time (h)')
+TIME_COLUMN = ('t', '-w', 'Time (s)')
+UTILITY_GRID_POWER_COLUMN = ('ugp', '-g', 'Utility Grid Power (kW)')
+UTILITY_GRID_VOLTAGE_COLUMN = ('ugv', '-w', 'Utility Grid Voltage (V)')
+UTILITY_GRID_CURRENT_COLUMN = ('ugc', '-w', 'Utility Grid Current, (A)')
+ENERGY_STORAGE_POWER_COLUMN = ('esp', '-y', 'Energy Storage Power (kW)')
+ENERGY_STORAGE_VOLTAGE_COLUMN = ('esv', '-w', 'Energy Storage Voltage (V)')
+ENERGY_STORAGE_CURRENT_COLUMN = ('esc', '-w', 'Energy Storage Current (A)')
+ENERGY_STORAGE_ENERGY_COLUMN = ('ese', '-b', 'Energy Storage Energy (kWh)')
+SOLAR_ARRAY_POWER_COLUMN = ('sap', '-c', 'Solar Array Power (kW)')
+DIESEL_GENERATOR_POWER_COLUMN = ('dgp', '-k', 'Diesel Generator Power (kW)')
+DIESEL_GENERATOR_FUEL_COLUMN = ('dgf', '-m', 'Diesel Generator Fuel (L)')
+LOAD_DEMAND_POWER_COLUMN = ('ldp', '-r', 'Load Demand Power (kW)')
 
-COLUMNS = '{},{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(ACTION_COLUMN, HOURS_COLUMN, TIME_COLUMN,
-                                                             UTILITY_GRID_POWER_COLUMN, UTILITY_GRID_VOLTAGE_COLUMN,
-                                                             UTILITY_GRID_CURRENT_COLUMN, ENERGY_STORAGE_POWER_COLUMN,
-                                                             ENERGY_STORAGE_VOLTAGE_COLUMN,
-                                                             ENERGY_STORAGE_CURRENT_COLUMN,
-                                                             ENERGY_STORAGE_ENERGY_COLUMN, SOLAR_ARRAY_POWER_COLUMN,
-                                                             DIESEL_GENERATOR_POWER_COLUMN,
-                                                             DIESEL_GENERATOR_FUEL_COLUMN, LOAD_DEMAND_POWER_COLUMN)
+COLUMNS = 'a,h,t,ugp,ugv,ugc,esp,esv,esc,ese,sap,dgp,dgf,ldp'
 
 # variables
 UTILITY_GRID_MAX_POWER = 500
