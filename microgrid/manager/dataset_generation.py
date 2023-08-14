@@ -61,10 +61,11 @@ def toggle_island_hazard_prediction_dataset(controller):
 
 
 def toggle_night_reload_hazard_prediction_dataset(controller):
-    controller.write('t,ese,sap,dgf,ldp,t1,ese1,dgf1,h,class\n')
+    controller.write('t,esp,ese,sap,dgf,ldp,action,t1,ugp1,esp1,ese1,dgf1,ldp1,class\n')
 
     select_1 = 'SELECT value FROM {} WHERE ' \
                'name LIKE "TIME" OR ' \
+               'name LIKE "ENERGY_STORAGE_POWER" OR ' \
                'name LIKE "ENERGY_STORAGE_ENERGY" OR ' \
                'name LIKE "SOLAR_ARRAY_POWER" OR ' \
                'name LIKE "DIESEL_GENERATOR_FUEL" OR ' \
@@ -72,25 +73,22 @@ def toggle_night_reload_hazard_prediction_dataset(controller):
 
     select_2 = 'SELECT value FROM {} WHERE ' \
                'name LIKE "TIME" OR ' \
+               'name LIKE "UTILITY_GRID_POWER" OR ' \
+               'name LIKE "ENERGY_STORAGE_POWER" OR ' \
                'name LIKE "ENERGY_STORAGE_ENERGY" OR ' \
-               'name LIKE "DIESEL_GENERATOR_FUEL"'
-
-    select_3 = 'SELECT value FROM {} WHERE ' \
-               'name LIKE "DIESEL_GENERATOR_FUEL"'
+               'name LIKE "DIESEL_GENERATOR_FUEL" OR ' \
+               'name LIKE "LOAD_DEMAND_POWER"'
 
     custom_cycle = [
         CLOCK_TICK,
         SET_GRID_VOLTAGE,
         SET_SOLAR_POWER,
         SET_LOAD,
-        PEAK_SHAVING,
-        CONSUME_BATTERY,
-        GENERATOR_SUPPLY,
-        RELOAD_BATTERY
+        PEAK_SHAVING
     ]
 
-    fuels = [750, 350, 100, 50, 25, 10, 20, 5, 2.5, 0]
-    energies = [1000, 750, 500, 200, 50, 0, 100, 25]
+    fuels = [750, 350, 100, 50, 40, 30, 20, 10, 5, 0]
+    energies = [1000, 750, 500, 250, 150, 100, 50, 25, 0]
 
     for k in range(2):
         time = -3600
@@ -100,29 +98,24 @@ def toggle_night_reload_hazard_prediction_dataset(controller):
             for fuel in fuels:
 
                 for energy in energies:
-
                     updates = ['UPDATE {} SET value = {} WHERE name LIKE "TIME"'.format({}, time),
                                'UPDATE {} SET value = {} WHERE name LIKE "ENERGY_STORAGE_ENERGY"'.format({}, energy),
                                'UPDATE {} SET value = {} WHERE name LIKE "DIESEL_GENERATOR_FUEL"'.format({}, fuel)]
 
                     controller.set_state(updates)
+
                     controller.run_cycles(1, True, select_1, custom_cycle)
+                    controller.run_action(TOGGLE_NIGHT_RELOAD, True)
 
-                    [remaining_fuel] = controller.get_values(select_3)
-                    j = 0
-
-                    while remaining_fuel > 0 and j < 24:
-                        controller.run_cycles(1, False, None, custom_cycle)
-                        [remaining_fuel] = controller.get_values(select_3)
-                        j += 1
+                    status = controller.run_cycles(12, False, None, None)
 
                     final_state = controller.get_values(select_2)
-                    value = '0' if j < 24 else '1'
-                    controller.write('{}, {}, {}'.format(str(final_state)[1:-1], j, value))
+                    actual = '0' if status == -1 else '1'
+                    controller.write('{}, {}'.format(str(final_state)[1:-1], actual))
 
+                    controller.run_action(TOGGLE_NIGHT_RELOAD, False)
                     controller.new_row()
 
             time += 3600
 
         controller.run_action(TOGGLE_CLOUDY, False)
-        controller.run_cycles(1, False, None, None)
