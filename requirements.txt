@@ -3,3 +3,6 @@ setuptools
 minicps~=1.1.4
 mininet~=2.3.0
 joblib
+pandas
+numpy
+matplotlib
