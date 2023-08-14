@@ -11,13 +11,15 @@ buffer = Buffer()
 
 class Manager:
 
-    def __init__(self, cycle_actions, external_actions, cycles, constraint, hazard_prediction, table, columns, control):
+    def __init__(self, cycle_actions, external_actions, cycles, constraint,
+                 hazard_prediction, table, columns, graphic, control):
         self.cycle_actions = cycle_actions
         self.external_actions = external_actions
         self.cycles = cycles
         self.constraint = constraint
         self.hazard_prediction = hazard_prediction
         self.state = State(table)
+        self.graphic = graphic
         self.control = control
 
         self.logger = Logger(self.state, columns)
@@ -89,6 +91,9 @@ class Manager:
                 pass
 
             self.logger.log_cycle(None)
+
+            if self.graphic is not None:
+                self.graphic.draw()
 
             if collect_cycle:
                 self.dataset.store_cycle(select)
