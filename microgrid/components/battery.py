@@ -19,7 +19,7 @@ peak_shaved = 1
 islanded = 0
 night_reloaded = 1
 
-MAX_POWER = 800
+MAX_POWER = 1000
 
 NOMINAL_VOLTAGE = 5000
 MIN_VOLTAGE = NOMINAL_VOLTAGE - NOMINAL_VOLTAGE * 0.3
