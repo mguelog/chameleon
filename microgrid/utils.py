@@ -194,3 +194,6 @@ TOGGLE_PEAK_SHAVING = 'toggle_peak_shaving'
 TOGGLE_CLOUDY = 'toggle_cloudy'
 TOGGLE_NIGHT_RELOAD = 'toggle_night_reload'
 REFUEL_GENERATOR = 'refuel_generator'
+
+# external stealthy actions
+TOGGLE_LOAD_PEAK = 'toggle_load_peak'

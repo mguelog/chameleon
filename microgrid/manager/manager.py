@@ -3,6 +3,7 @@ from chameleon.simulation.manager import Manager
 from chameleon.simulation.graphic import Graphic
 from microgrid.manager.dataset_generation import *
 from microgrid.manager.action_test import *
+from microgrid.manager.hazard_detection import *
 from microgrid.utils import *
 
 cycle_actions = [
@@ -17,12 +18,16 @@ cycle_actions = [
     NIGHT_RELOAD
 ]
 
-external_actions = [
+external_command_actions = [
     TOGGLE_ISLAND,
     TOGGLE_PEAK_SHAVING,
     TOGGLE_CLOUDY,
     REFUEL_GENERATOR,
     TOGGLE_NIGHT_RELOAD
+]
+
+external_stealthy_actions = [
+    TOGGLE_LOAD_PEAK
 ]
 
 
@@ -50,10 +55,11 @@ graphic = Graphic('Microgrid', HOURS_COLUMN,
 
 manager = Manager(
     cycle_actions=cycle_actions,
-    external_actions=external_actions,
+    external_command_actions=external_command_actions,
+    external_stealthy_actions=external_stealthy_actions,
     cycles=1440,
     constraint=constraint,
-    hazard_prediction=None,
+    hazard_prediction=action_hazard_prediction,
     table=NAME,
     columns=COLUMNS,
     graphic=graphic,
