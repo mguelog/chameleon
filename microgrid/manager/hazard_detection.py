@@ -3,6 +3,7 @@ import joblib
 
 toggle_island_hazard_prediction = joblib.load('manager/models/toggle_island_hazard_prediction_model.sav')
 toggle_night_reload_hazard_prediction = joblib.load('manager/models/toggle_night_reload_hazard_prediction_model.sav')
+load_peak_anomaly_detection = joblib.load('manager/models/load_peak_anomaly_detection_model.sav')
 
 islanded = False
 night_reload = False
@@ -45,3 +46,18 @@ def action_hazard_prediction(controller, external_action):
             return prediction == 1
 
     return True
+
+
+def anomaly_detection(controller):
+    select = 'SELECT value FROM {} WHERE ' \
+             'name LIKE "TIME" OR ' \
+             'name LIKE "UTILITY_GRID_POWER" OR ' \
+             'name LIKE "ENERGY_STORAGE_POWER"'
+
+    values = controller.get_values(select)
+    [detection] = load_peak_anomaly_detection.predict([values])
+
+    if detection == 0:
+        return 'load peak anomaly'
+
+    return None
