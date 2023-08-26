@@ -28,3 +28,8 @@ class Logger:
             if values is not None:
                 with open(CYCLE_LOG, 'a') as file:
                     file.write(',' + str(values)[1:-1] + '\n')
+
+    def log_anomaly(self, anomaly):
+        if anomaly is not None:
+            with open(CYCLE_LOG, 'a') as file:
+                file.write(anomaly + '\n')

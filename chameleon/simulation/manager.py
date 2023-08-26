@@ -13,13 +13,14 @@ class Manager:
     status_actions = [buffer.EXIT, buffer.FAILURE]
 
     def __init__(self, cycle_actions, external_command_actions, external_stealthy_actions, cycles,
-                 constraint, hazard_prediction, table, columns, graphic, control):
+                 constraint, hazard_prediction, anomaly_detection, table, columns, graphic, control):
         self.cycle_actions = cycle_actions
         self.external_command_actions = external_command_actions
         self.external_stealthy_actions = external_stealthy_actions
         self.cycles = cycles
         self.constraint = constraint
         self.hazard_prediction = hazard_prediction
+        self.anomaly_detection = anomaly_detection
         self.state = State(table)
         self.graphic = graphic
         self.control = control
@@ -96,6 +97,9 @@ class Manager:
 
             if self.graphic is not None:
                 self.graphic.draw()
+
+            if self.anomaly_detection is not None:
+                self.logger.log_anomaly(self.anomaly_detection(self.controller))
 
             if collect_cycle:
                 self.dataset.store_cycle(select)
