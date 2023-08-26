@@ -119,3 +119,47 @@ def toggle_night_reload_hazard_prediction_dataset(controller):
             time += 3600
 
         controller.run_action(TOGGLE_CLOUDY, False)
+
+
+def anomaly_detection_dataset(controller, stealthy_action):
+    controller.write('h,t,ugp,ugv,ugc,esp,esv,esc,ese,sap,dgp,dgf,ldp,class\n')
+
+    fuels = [1000, 750, 500, 250, 100, 50]
+    energies = [1000, 750, 500, 250, 100, 50]
+
+    anomaly = 1
+
+    if stealthy_action is not None:
+        controller.run_action(stealthy_action, False)
+        anomaly = 0
+
+    for i in range(3):
+
+        if 0 < i <= 2:
+            controller.run_action(TOGGLE_ISLAND, False)
+
+        if i == 2:
+            controller.run_action(TOGGLE_NIGHT_RELOAD, False)
+
+        for j in range(2):
+            time = -900
+
+            for k in range(48):
+
+                for fuel in fuels:
+
+                    for energy in energies:
+                        updates = ['UPDATE {} SET value = {} WHERE name LIKE "TIME"'.format({}, time),
+                                   'UPDATE {} SET value = {} WHERE name LIKE "ENERGY_STORAGE_ENERGY"'.format({},
+                                                                                                             energy),
+                                   'UPDATE {} SET value = {} WHERE name LIKE "DIESEL_GENERATOR_FUEL"'.format({}, fuel)]
+
+                        controller.set_state(updates)
+                        controller.run_cycles(1, True, None, None)
+
+                        controller.write('{}'.format(anomaly))
+                        controller.new_row()
+
+                time += 1800
+
+            controller.run_action(TOGGLE_CLOUDY, False)
