@@ -10,11 +10,13 @@ buffer = Buffer()
 
 
 class Manager:
+    status_actions = [buffer.EXIT, buffer.FAILURE]
 
-    def __init__(self, cycle_actions, external_actions, cycles, constraint,
-                 hazard_prediction, table, columns, graphic, control):
+    def __init__(self, cycle_actions, external_command_actions, external_stealthy_actions, cycles,
+                 constraint, hazard_prediction, table, columns, graphic, control):
         self.cycle_actions = cycle_actions
-        self.external_actions = external_actions
+        self.external_command_actions = external_command_actions
+        self.external_stealthy_actions = external_stealthy_actions
         self.cycles = cycles
         self.constraint = constraint
         self.hazard_prediction = hazard_prediction
@@ -40,8 +42,8 @@ class Manager:
 
             (external_action, collect_action) = self.queue.get()
 
-            if external_action not in [buffer.FAILURE, buffer.EXIT]:
-                if self.hazard_prediction is None:
+            if external_action not in self.status_actions:
+                if external_action in self.external_stealthy_actions or self.hazard_prediction is None:
                     buffer.write(external_action)
                 else:
                     if self.hazard_prediction(self.controller, external_action):
@@ -110,7 +112,8 @@ class Manager:
         while self.running:
             external_actions = set(input('> ').split())
             for external_action in external_actions:
-                if external_action in self.external_actions or external_action == buffer.EXIT:
+                if external_action in (
+                        self.status_actions + self.external_command_actions + self.external_stealthy_actions):
                     self.run_action(external_action, False)
                 elif self.running:
                     print('Action {} not found'.format(external_action))
