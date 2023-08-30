@@ -6,11 +6,8 @@ from chameleon.simulation.controller import Controller
 from threading import Thread
 import queue
 
-buffer = Buffer()
-
 
 class Manager:
-    status_actions = [buffer.EXIT, buffer.FAILURE]
 
     def __init__(self, cycle_actions, external_command_actions, external_stealthy_actions, cycles,
                  constraint, hazard_prediction, anomaly_detection, table, columns, graphic, control):
@@ -25,30 +22,32 @@ class Manager:
         self.graphic = graphic
         self.control = control
 
+        self.buffer = Buffer()
         self.logger = Logger(self.state, columns)
         self.dataset = Dataset(self.state)
         self.controller = Controller(self, table)
         self.queue = queue.Queue()
         self.running = True
 
-        buffer.create()
+        self.status_actions = [self.buffer.EXIT, self.buffer.FAILURE]
+        self.buffer.create()
 
     def run_action(self, action, collect_action):
         self.queue.put((action, collect_action))
 
     def action_queue(self):
         while not self.queue.empty():
-            while not buffer.is_free():
+            while not self.buffer.is_free():
                 pass
 
             (external_action, collect_action) = self.queue.get()
 
             if external_action not in self.status_actions:
                 if external_action in self.external_stealthy_actions or self.hazard_prediction is None:
-                    buffer.write(external_action)
+                    self.buffer.write(external_action)
                 else:
                     if self.hazard_prediction(self.controller, external_action):
-                        buffer.write(external_action)
+                        self.buffer.write(external_action)
                     else:
                         return 0
 
@@ -58,11 +57,11 @@ class Manager:
             if collect_action:
                 self.dataset.store_action(external_action)
 
-            if external_action == buffer.FAILURE:
+            if external_action == self.buffer.FAILURE:
                 self.running = False
                 return -1
 
-            if external_action == buffer.EXIT:
+            if external_action == self.buffer.EXIT:
                 self.running = False
                 return 1
 
@@ -84,13 +83,13 @@ class Manager:
                 cycle_actions = custom_cycle
 
             for cycle_action in cycle_actions:
-                while not buffer.is_free():
+                while not self.buffer.is_free():
                     pass
 
                 self.logger.log_state(cycle_action)
-                buffer.write(cycle_action)
+                self.buffer.write(cycle_action)
 
-            while not buffer.is_free():
+            while not self.buffer.is_free():
                 pass
 
             self.logger.log_cycle(None)
@@ -104,8 +103,8 @@ class Manager:
             if collect_cycle:
                 self.dataset.store_cycle(select)
 
-            if self.constraint is not None and not self.constraint():
-                self.run_action(buffer.FAILURE, False)
+            if self.constraint is not None and not self.constraint(self.controller):
+                self.run_action(self.buffer.FAILURE, False)
                 return self.action_queue()
 
         self.running = False
