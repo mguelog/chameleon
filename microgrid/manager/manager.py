@@ -31,9 +31,7 @@ external_stealthy_actions = [
 ]
 
 
-def constraint():
-    controller = Controller(manager, NAME)
-
+def constraint(controller):
     select = 'SELECT value FROM {} WHERE ' \
              'name LIKE "UTILITY_GRID_POWER" OR ' \
              'name LIKE "ENERGY_STORAGE_POWER" OR ' \
@@ -63,5 +61,5 @@ manager = Manager(
     anomaly_detection=anomaly_detection,
     table=NAME,
     columns=COLUMNS,
-    graphic=None,
+    graphic=graphic,
     control=control_routine)
