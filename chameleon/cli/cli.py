@@ -45,4 +45,10 @@ simulate_parser.add_argument(
     action='store_true'
 )
 
+simulate_parser = subparsers.add_parser(
+    'clean',
+    description='Clean simulation network',
+    help='clean simulation network'
+)
+
 args = parser.parse_args()

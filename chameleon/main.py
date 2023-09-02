@@ -41,6 +41,9 @@ def main():
 
         subprocess.run(['sudo', 'python3.10', 'control.py'])
 
+    elif args.command == 'clean':
+        os.system('sudo pkill  -f -u root "python -m cpppo.server.enip"; sudo mn -c')
+
 
 if __name__ == '__main__':
     main()
