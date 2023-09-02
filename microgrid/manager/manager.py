@@ -21,12 +21,12 @@ cycle_actions = [
 external_command_actions = [
     TOGGLE_ISLAND,
     TOGGLE_PEAK_SHAVING,
-    TOGGLE_CLOUDY,
-    REFUEL_GENERATOR,
-    TOGGLE_NIGHT_RELOAD
+    TOGGLE_NIGHT_RELOAD,
+    REFUEL_GENERATOR
 ]
 
 external_stealthy_actions = [
+    TOGGLE_CLOUDY,
     TOGGLE_LOAD_PEAK
 ]
 
