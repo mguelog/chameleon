@@ -6,6 +6,7 @@ from topo import topo
 simulation = Simulation(
     name='tank_cps',
     devices=[CONTROLLER_NAME, TANK_NAME],
+    devices_directory='.',
     topo=topo,
     manager=manager,
     cli=False,
